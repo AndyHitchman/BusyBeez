@@ -1,0 +1,17 @@
+h1 Active jobs
+ul
+  - each job in jobs
+    li
+      div.job.summary(class=job.status)
+        div.offer
+          div.avatar #{job.avatar}
+          div.amount $36
+        div.details
+          div.name #{job.name}
+          div.description #{job.description}
+            | wibble
+        div.status-box
+          div wibble
+          div wobble
+          div waggle
+

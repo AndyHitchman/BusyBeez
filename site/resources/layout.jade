@@ -1,0 +1,11 @@
+!!! 5
+html
+  head
+    title= (pageTitle.get() !== null ? pageTitle.get() + ' --- ' : '') + 'Busy Beez --- Local help gets things done'
+    link(rel='stylesheet/less', href='/stylesheets/style.less')
+    script(type='text/javascript', src='/javascripts/less.js')
+    script(type='text/javascript', src='/javascripts/jquery.min.js')
+    script(type='text/javascript', src='/javascripts/jquery-ui.min.js')
+  body
+    != body
+
