@@ -1,68 +1,84 @@
 - pageTitle.set('List a New Job')
 h1= pageTitle.get()
 form(method='post',action='/jobs/new')
-  div.field
-    label.above What type of job is it?
+  fieldset#description
+    h2 What is the Job?
     div.field#jobType
-      input#jobTypeErrand(type='radio',name='jobType')
+      input#jobTypeErrand(type='radio',name='jobType',value='errand',checked='checked')
       label(for='jobTypeErrand',title='around and about the local area, e.g. shopping run') 
         img(src='/images/errand.png')
-        | Local Errand
-      input#jobTypePickup(type='radio',name='jobType')
+        | Errand
+      input#jobTypePickup(type='radio',name='jobType',value='pickup')
       label(for='jobTypePickup',title='need transport, e.g. parcel collection')
         img(src='/images/pickup.png')
         | Pickup
-      input#jobTypeMove(type='radio',name='jobType')
+      input#jobTypeMove(type='radio',name='jobType',value='move')
       label(for='jobTypeMove',title='need a van, e.g. moving furniture')
         img(src='/images/move.png')
         | Move
-      input#jobTypeHelp(type='radio',name='jobType')
-      label(for='jobTypeHelp',title='lend me a hand, e.g. a two-person job')
+      input#jobTypeHelp(type='radio',name='jobType',value='help')
+      label(for='jobTypeHelp',title='lend me a hand, e.g. a two-person job, house sit')
         img(src='/images/helping-hand.png')
         | Helping hand
-      input#jobTypeOnline(type='radio',name='jobType')
+      input#jobTypeOnline(type='radio',name='jobType',value='online')
       label(for='jobTypeOnline',title='wholly online, e.g. research')
         img(src='/images/online.png')
         | Online
 
-  div.field
-    label.above(for='title') What is the title of the job?
-    input.title(name='title',placeholder='walk the dog, weekly shop, build a bookcase')
+    div.field
+      label.above(for='title') What is the title of the job?
+      input#title.title(name='title',placeholder='shop for groceries, walk my dog')
 
-  div#errandLocation.field.ui-widget
-    label.above(for='errandSuburb') Which suburb or town is the errand in?
-    input#errandSuburb.suburb.flow(placeholder='type to see suggestions')
-    input#errandSuburbId(type='hidden',name='startSuburbId')
+  fieldset#location
+    h2 Where is the job? 
 
-  div#pickupLocations.field.ui-widget
-    label.above(for='pickupSuburb') Which suburb or town is the pickup at?
-    input#pickupSuburb.suburb.flow(placeholder='type to see suggestions')
-    input#pickupSuburbId(type='hidden',name='startSuburbId')
-    label.above(for='dropoffSuburb') Which suburb or town is the drop-off at?
-    input#dropoffSuburb.suburb.flow(placeholder='type to see suggestions')
-    input#dropoffSuburbId(type='hidden',name='finishSuburbId')
+    div#errandLocation.field.ui-widget
+      label.above(for='errandSuburb') Which suburb or town is the errand in?
+      input#errandSuburb.suburb.flow(placeholder='type to see suggestions')
+      input#errandSuburbId(type='hidden',name='startSuburbId')
 
-  div#moveLocations.field.ui-widget
-    label.above(for='moveFromSuburb') Which suburb or town does the move start at?
-    input#moveFromSuburb.suburb.flow(placeholder='type to see suggestions')
-    input#moveFromSuburbId(type='hidden',name='startSuburbId')
-    label.above(for='moveToSuburb') Which suburb or town does the move finish at?
-    input#moveToSuburb.suburb.flow(placeholder='type to see suggestions')
-    input#moveToSuburbId(type='hidden',name='finishSuburbId')
+    div#pickupLocations.field.ui-widget
+      label.above(for='pickupSuburb') Which suburb or town is the pickup at?
+      input#pickupSuburb.suburb.flow(placeholder='type to see suggestions')
+      input#pickupSuburbId(type='hidden',name='startSuburbId')
+      label.above(for='dropoffSuburb') Which suburb or town is the drop-off at?
+      input#dropoffSuburb.suburb.flow(placeholder='type to see suggestions')
+      input#dropoffSuburbId(type='hidden',name='finishSuburbId')
 
-  div#helpLocation.field.ui-widget
-    label.above(for='helpInSuburb') Which suburb or town do you need help in?
-    input#helpSuburb.suburb.flow(placeholder='type to see suggestions')
-    input#helpSuburbId(type='hidden',name='startSuburbId')
+    div#moveLocations.field.ui-widget
+      label.above(for='moveFromSuburb') Which suburb or town does the move start at?
+      input#moveFromSuburb.suburb.flow(placeholder='type to see suggestions')
+      input#moveFromSuburbId(type='hidden',name='startSuburbId')
+      label.above(for='moveToSuburb') Which suburb or town does the move finish at?
+      input#moveToSuburb.suburb.flow(placeholder='type to see suggestions')
+      input#moveToSuburbId(type='hidden',name='finishSuburbId')
+
+    div#helpLocation.field.ui-widget
+      label.above(for='helpInSuburb') Which suburb or town do you need help in?
+      input#helpSuburb.suburb.flow(placeholder='type to see suggestions')
+      input#helpSuburbId(type='hidden',name='startSuburbId')
 
 script
   $(function() {
     $('#jobType').buttonset();
 
-    $('#jobTypeErrand').toggleDependentFields($('#errandLocation'));
-    $('#jobTypePickup').toggleDependentFields($('#pickupLocations'));
-    $('#jobTypeMove').toggleDependentFields($('#moveLocations'));
-    $('#jobTypeHelp').toggleDependentFields($('#helpLocation'));
+    $('#jobTypeErrand, #jobTypePickup, #jobTypeMove, #jobTypeHelp')
+      .toggleDependentFields($('#location'));
+
+    $('#jobTypeErrand')
+      .click(function() { $('#title').attr('placeholder', 'shop for groceries, walk my dog') })
+      .toggleDependentFields($('#errandLocation'));
+    $('#jobTypePickup')
+      .click(function() { $('#title').attr('placeholder', 'pickup a parcel, deliver some flowers') })
+      .toggleDependentFields($('#pickupLocations'));
+    $('#jobTypeMove')
+      .click(function() { $('#title').attr('placeholder', 'collect a bed, remove my stuff') })
+      .toggleDependentFields($('#moveLocations'));
+    $('#jobTypeHelp')
+      .click(function() { $('#title').attr('placeholder', 'house sit, build a bookcase, fix my car') })
+      .toggleDependentFields($('#helpLocation'));
+    $('#jobTypeOnline')
+      .click(function() { $('#title').attr('placeholder', 'compare laptops, research composting') })
 
     $("#errandSuburb").suggest({
       source: '/reference/locality',
