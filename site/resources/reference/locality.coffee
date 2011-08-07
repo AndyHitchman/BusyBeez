@@ -7,6 +7,7 @@ module.exports = (app, db) ->
 
     db.collection('localities')
       .find({locality: { $regex : match, $options: 'i'}})
+      .limit(100)
       .toArray (err, items) ->
         res.send _(items)
           .chain()
@@ -17,7 +18,7 @@ module.exports = (app, db) ->
           .value()
           .concat(
             if items.length > max
-              [{ more: true, excess: items.length - max }]
+              [{ more: true, excess: items.length - max, clipped: items.length == 100 }]
             else
               []
           )

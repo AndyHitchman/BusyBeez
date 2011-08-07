@@ -56,26 +56,28 @@ h1.title {
   Forms 
 */
 
-label {
-  display: block;
-  font-size: @form-font-size;
-  color: @label-color;
-}
-
-.form-inputs {
-  display: block;
-  font-size: @form-font-size;
-}
-
-input, select, textarea, button {
-  .form-inputs;
+.field {
+  margin-top: 1ex;
+  label.above {
+    display: block;
+    font-size: @form-font-size;
+    color: @label-color;
+  }
+  input, select, textarea, button {
+    display: block;
+    width: 30em;
+    font-size: @form-font-size;
+  }
+  .flow {
+    display: inline;
+  }
 }
 
 .ui-autocomplete-loading { 
   background: url('/images/ui-anim_basic_16x16.gif') right center no-repeat; 
 }
 
-.autocomplete-info {
+.suggest-info {
   position: relative;
   display: inline-block;
   right: 10em;
@@ -83,21 +85,9 @@ input, select, textarea, button {
   text-align: right;
   color: @label-color;
   font-style: italic;
+  font-size: 9pt;
 }
 
-.ui-widget {
-  input, select, textarea, button {
-    .form-inputs;
-  }
-}
-
-input.flow, select.flow {
-  display: inline;
-}
-
-#suburb {
-  width: 16em;
-}
 
 .job.summary {
   margin: 1ex 0;
@@ -151,4 +141,6 @@ input.flow, select.flow {
   padding: 0.5ex 0.5em;
 }
 
-
+#jobType img {
+  vertical-align: middle;
+}
