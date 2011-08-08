@@ -3,7 +3,7 @@ h1= pageTitle.get()
 form.new-job(method='post',action='/jobs/new')
 
   fieldset#description
-    h2 What is the Job?
+    legend What is the Job?
     div.field#jobType
       input#jobTypeErrand(type='radio',name='jobType',value='errand',checked)
       label(for='jobTypeErrand',title='around and about the local area, e.g. shopping run') 
@@ -40,15 +40,16 @@ form.new-job(method='post',action='/jobs/new')
         placeholder='put in as much detail as you can; describe any items to be carried or purhcased, possibly including size and weight; the approximate time required to complete the job; any special tools required')
 
   fieldset#location
-    h2 Where is the job? 
+    legend Where is the job? 
 
     div#oneLocation.summary.field.ui-widget
-      div.panel.area.start
+      fieldset.panel.area.start
+        legend Location
         label.above(for='jobSuburb') Suburb/town
           img(src='/images/public.png',alt='public',title='public, shown to everyone')
         input#jobSuburb.address-line.flow(placeholder='type to see suggestions')
-        div.address.detail.field.area
-          label Address
+        fieldset.address.detail.field.area
+          legend Address
             img(src='/images/private.png',alt='private',title='private, only shown to assigned worker')
           div
             label.above(for='locationName') Location Name
@@ -61,12 +62,13 @@ form.new-job(method='post',action='/jobs/new')
             div#jobLocationLocality.read-only.address-line
 
     div#twoLocations.summary.field.ui-widget
-      div.panel.area.start
+      fieldset.panel.summary.area.start
+        legend Starting Location
         label.above(for='jobStartSuburb') Starting suburb/town
           img(src='/images/public.png',alt='public',title='public, shown to everyone')
         input#jobStartSuburb.address-line.flow(placeholder='type to see suggestions')
-        div.address.detail.area.field
-          label Starting address
+        fieldset.address.detail.area.field
+          legend Address
             img(src='/images/private.png',alt='private',title='private, only shown to assigned worker')
           div
             label.above(for='jobStartLocationName') Location Name
@@ -79,14 +81,15 @@ form.new-job(method='post',action='/jobs/new')
             div#jobStartLocality.read-only.address-line
           
       div.panel
-        img(src='/images/travel-to.png',alt='to')
+        img.top-space(src='/images/travel-to.png',alt='to')
 
-      div.panel.area.finish
+      fieldset.panel.summary.area.finish
+        legend Finishing Location
         label.above(for='jobFinishSuburb') Finishing suburb/town
           img(src='/images/public.png',alt='public',title='public, shown to everyone')
         input#jobFinishSuburb.address-line.flow(placeholder='type to see suggestions')
-        div.address.detail.area.field
-          label Finishing address 
+        fieldset.address.detail.area.field
+          legend Address 
             img(src='/images/private.png',alt='private',title='private, only shown to assigned worker')
           div
             label.above(for='jobFinishLocationName') Location Name
