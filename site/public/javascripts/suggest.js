@@ -20,18 +20,17 @@
           $info.text('');
           $.getJSON(settings.source, req, function(data) {  
             var suggestions = [];
-            if(data.length == 0) {
+            if(data.meta.matches == 0) {
               $info.text('No matches');
+            } 
+            else if(data.meta.clipped) {
+              $info.text('many more matches');
             }
-            $.each(data, function(i, val) {  
-              if(val.clipped) {
-                $info.text('many more matches');
-              }
-              else if(val.more) {
-                $info.text(val.excess + ' more match' + (val.excess > 1 ? 'es' : ''));
-              } else {
-                suggestions.push({ label: val.label, id: val.id });  
-              }
+            else if(data.meta.more) {
+              $info.text(data.meta.excess + ' more match' + (data.meta.excess > 1 ? 'es' : ''));
+            }
+            $.each(data.items, function(i, val) {  
+                suggestions.push({ label: val.label, id: val.id, supplement: val.supplement });  
             });  
             add(suggestions);
           });

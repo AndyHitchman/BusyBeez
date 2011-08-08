@@ -9,16 +9,23 @@ module.exports = (app, db) ->
       .find({locality: { $regex : match, $options: 'i'}})
       .limit(100)
       .toArray (err, items) ->
-        res.send _(items)
-          .chain()
-          .first(10)
-          .map((i) ->
-            id : i._id, label : i.locality + ' (' + i.state + ')'
-          )
-          .value()
-          .concat(
-            if items.length > max
-              [{ more: true, excess: items.length - max, clipped: items.length == 100 }]
-            else
-              []
-          )
+        res.send {
+          items: _(items).chain()
+                  .first(10)
+                  .map((i) -> {
+                    id          : i._id, 
+                    label       : i.locality + ' (' + i.state + ')',
+                    supplement  : {
+                      suburb          : i.locality,
+                      postcode        : i.postcode,
+                      state           : i.state
+                    }
+                  })
+                  .value(),
+          meta: {
+            clipped:  items.length == 100,
+            more:     if items.length > max then true else false,
+            excess:   items.length - max,
+            matches:  items.length
+          }
+        }

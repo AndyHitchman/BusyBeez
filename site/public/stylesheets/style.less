@@ -3,8 +3,11 @@
 @import "/stylesheets/jquery-ui.css";
 
 @font-family: Helvetica, Arial, sans-serif;
-@form-font-size: 16pt;
 @label-color: #36f;
+@head-color: #03a;
+@area-color: #f9f9f9;
+@green-area-color: #DEFFB5;
+@red-area-color: #FCD3BD;
 
 html {
 }
@@ -14,13 +17,25 @@ body {
   font: 14px @font-family;
 }
 
+.ui-widget {
+  font-family: @font-family;
+}
+
 h1 {
   font-size: 24pt;
+  text-shadow: 1.25pt 1.25pt 1.5pt #666;
 }
 
 h2 {
-  margin-top: 2ex;
+  margin-top: 1ex;
   font-size: 20pt;
+  color: @head-color;
+}
+
+h3 {
+  margin-top: 1ex;
+  font-size: 14pt;
+  color: @label-color;
 }
 
 
@@ -36,8 +51,23 @@ h1.title {
   height: 25ex;
 }
 
-.third-pane {
+.panel {
   float: left;
+}
+
+.area {
+  border: 1px solid #cdcdcd;
+  border-radius: 4px 4px;
+  background-color: @area-color;
+  padding: 1ex 1em 2ex 1em;
+}
+
+.area .area {
+  background-color: white;
+}
+
+.third-pane {
+  .panel;
   width: 33%;
   height: 100%;
 }
@@ -62,17 +92,47 @@ h1.title {
   margin-top: 1ex;
   label.above {
     display: block;
-    font-size: @form-font-size;
-    color: @label-color;
   }
-  input, select, textarea, button {
-    display: block;
-    width: 28em;
-    font-size: @form-font-size;
+  input, select, textarea {
+    border: solid 1px #cdcdcd;
+    border-radius: 3px 3px;
+  }
+  input:focus, select:focus, textarea:focus {
+    background-color: #ffffc0;
+  }
+  input:-moz-placeholder,
+  textarea:-moz-placeholder {
+    letter-spacing: -0.1ex;
   }
   .flow {
     display: inline;
   }
+}
+
+.summary {
+  label, input, select, textarea, button {
+    font-size: 16pt;
+  }
+  label {
+    color: @label-color;
+  }
+}
+
+.detail {
+  label, input, select, textarea, button {
+    font-size: 12pt;
+  }
+  label {
+    color: @label-color;
+  }
+}
+
+.read-only {
+  background-color: #ddd;
+  border: solid 1px #cdcdcd;  
+  border-radius: 3px 3px;
+  height: 2ex;
+  padding: 0.25ex 0.55em 0.3ex 0.1em;
 }
 
 .ui-autocomplete-loading { 
@@ -149,18 +209,29 @@ h1.title {
 }
 
 
-#jobType img {
-  vertical-align: middle;
-}
-
-
 /* 
 ** New Job 
 */
 
-.field .suburb {
-  width: 16em;
+.new-job .wide {
+  width: 600px;
 }
 
 
+#jobType img {
+  vertical-align: middle;
+}
 
+.area.start {
+  background-color: @green-area-color;
+}
+
+.area.finish {
+  background-color: @red-area-color;
+}
+
+.field {
+  .address-line {
+    width: 16em;
+  }
+}
