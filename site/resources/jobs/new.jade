@@ -32,31 +32,18 @@ form(method='post',action='/jobs/new')
   fieldset#location
     h2 Where is the job? 
 
-    div#errandLocation.field.ui-widget
-      label.above(for='errandSuburb') Which suburb or town is the errand in?
-      input#errandSuburb.suburb.flow(placeholder='type to see suggestions')
-      input#errandSuburbId(type='hidden',name='startSuburbId')
+    div#oneLocation.field.ui-widget
+      label.above(for='jobSuburb') Which suburb or town is the job in?
+      input#jobSuburb.suburb.flow(placeholder='type to see suggestions')
+      input#jobSuburbId(type='hidden',name='jobSuburbId')
 
-    div#pickupLocations.field.ui-widget
-      label.above(for='pickupSuburb') Which suburb or town is the pickup at?
-      input#pickupSuburb.suburb.flow(placeholder='type to see suggestions')
-      input#pickupSuburbId(type='hidden',name='startSuburbId')
-      label.above(for='dropoffSuburb') Which suburb or town is the drop-off at?
-      input#dropoffSuburb.suburb.flow(placeholder='type to see suggestions')
-      input#dropoffSuburbId(type='hidden',name='finishSuburbId')
-
-    div#moveLocations.field.ui-widget
-      label.above(for='moveFromSuburb') Which suburb or town does the move start at?
-      input#moveFromSuburb.suburb.flow(placeholder='type to see suggestions')
-      input#moveFromSuburbId(type='hidden',name='startSuburbId')
-      label.above(for='moveToSuburb') Which suburb or town does the move finish at?
-      input#moveToSuburb.suburb.flow(placeholder='type to see suggestions')
-      input#moveToSuburbId(type='hidden',name='finishSuburbId')
-
-    div#helpLocation.field.ui-widget
-      label.above(for='helpInSuburb') Which suburb or town do you need help in?
-      input#helpSuburb.suburb.flow(placeholder='type to see suggestions')
-      input#helpSuburbId(type='hidden',name='startSuburbId')
+    div#twoLocations.field.ui-widget
+      label.above(for='startSuburb') Which suburbs or towns is the job between?
+      input#startSuburb.suburb.flow(placeholder='type to see suggestions')
+      img(src='/images/travel-to.png')
+      input#finishSuburb.suburb.flow(placeholder='type to see suggestions')
+      input#startSuburbId(type='hidden',name='startSuburbId')
+      input#finishSuburbId(type='hidden',name='finishSuburbId')
 
 script
   $(function() {
@@ -66,70 +53,44 @@ script
       .toggleDependentFields($('#location'));
 
     $('#jobTypeErrand')
-      .click(function() { $('#title').attr('placeholder', 'shop for groceries, walk my dog') })
-      .toggleDependentFields($('#errandLocation'));
+      .click(function() { $('#title').attr('placeholder', 'shop for groceries, walk my dog') });
     $('#jobTypePickup')
-      .click(function() { $('#title').attr('placeholder', 'pickup a parcel, deliver some flowers') })
-      .toggleDependentFields($('#pickupLocations'));
+      .click(function() { $('#title').attr('placeholder', 'pickup a parcel, deliver some flowers') });
     $('#jobTypeMove')
-      .click(function() { $('#title').attr('placeholder', 'collect a bed, remove my stuff') })
-      .toggleDependentFields($('#moveLocations'));
+      .click(function() { $('#title').attr('placeholder', 'collect a bed, office move') });
     $('#jobTypeHelp')
-      .click(function() { $('#title').attr('placeholder', 'house sit, build a bookcase, fix my car') })
-      .toggleDependentFields($('#helpLocation'));
+      .click(function() { $('#title').attr('placeholder', 'house sit, build a bookcase, fix my car') });
     $('#jobTypeOnline')
       .click(function() { $('#title').attr('placeholder', 'compare laptops, research composting') })
 
-    $("#errandSuburb").suggest({
+    $('#jobTypeErrand, #jobTypeHelp')
+      .toggleDependentFields($('#oneLocation'));
+    $('#jobTypePickup, #jobTypeMove')
+      .toggleDependentFields($('#twoLocations'));
+
+    $("#jobSuburb").suggest({
       source: '/reference/locality',
       select: function(event, ui) {
         if(ui.item) {
-          $('#errandSuburbId').val(ui.item.id);
+          $('#jobSuburbId').val(ui.item.id);
         }
       }
     });
 
-    $("#pickupSuburb").suggest({
+    $("#startSuburb").suggest({
       source: '/reference/locality',
       select: function(event, ui) {
         if(ui.item) {
-          $('#pickupSuburbId').val(ui.item.id);
+          $('#startSuburbId').val(ui.item.id);
         }
       }
     });
 
-    $("#dropoffSuburb").suggest({
+    $("#finishSuburb").suggest({
       source: '/reference/locality',
       select: function(event, ui) {
         if(ui.item) {
-          $('#dropoffSuburbId').val(ui.item.id);
-        }
-      }
-    });
-
-    $("#moveFromSuburb").suggest({
-      source: '/reference/locality',
-      select: function(event, ui) {
-        if(ui.item) {
-          $('#moveFromSuburbId').val(ui.item.id);
-        }
-      }
-    });
-
-    $("#moveToSuburb").suggest({
-      source: '/reference/locality',
-      select: function(event, ui) {
-        if(ui.item) {
-          $('#moveToSuburbId').val(ui.item.id);
-        }
-      }
-    });
-
-    $("#helpSuburb").suggest({
-      source: '/reference/locality',
-      select: function(event, ui) {
-        if(ui.item) {
-          $('#helpSuburbId').val(ui.item.id);
+          $('#finishSuburbId').val(ui.item.id);
         }
       }
     });

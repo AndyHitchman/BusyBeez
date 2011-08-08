@@ -23,6 +23,7 @@ h2 {
   font-size: 20pt;
 }
 
+
 ul.bullet {
   list-style: disc inside none;
 }
@@ -69,9 +70,6 @@ h1.title {
     width: 28em;
     font-size: @form-font-size;
   }
-  .suburb {
-    width: 18em;
-  }
   .flow {
     display: inline;
   }
@@ -84,7 +82,8 @@ h1.title {
 .suggest-info {
   position: relative;
   display: inline-block;
-  right: 10em;
+  margin-left: -10em;
+  margin-right: 0.5em;
   width: 9.5em;
   text-align: right;
   color: @label-color;
@@ -92,6 +91,10 @@ h1.title {
   font-size: 9pt;
 }
 
+
+/* 
+** List Job 
+*/
 
 .job.summary {
   margin: 1ex 0;
@@ -145,6 +148,19 @@ h1.title {
   padding: 0.5ex 0.5em;
 }
 
+
 #jobType img {
   vertical-align: middle;
 }
+
+
+/* 
+** New Job 
+*/
+
+.field .suburb {
+  width: 16em;
+}
+
+
+
