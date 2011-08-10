@@ -1,172 +1,163 @@
-- pageTitle.set('List a New Job')
+- pageTitle.set("List a New Job")
 h1= pageTitle.get()
-form.new-job(method='post',action='/jobs/new')
+form#new-job(method="post",action="/jobs/new")
 
-  fieldset#description
+  fieldset#description.area.ui-widget-content
     legend What is the Job?
-    div.field#jobType
-      input#jobTypeErrand(type='radio',name='jobType',value='errand',checked)
-      label(for='jobTypeErrand',title='around and about the local area, e.g. shopping run') 
-        img(src='/images/errand.png',alt='errand')
+
+    div.wide.field#jobType
+      input#jobTypeErrand(type="radio",name="jobType",value="errand",checked)
+      label(for="jobTypeErrand",title="around and about the local area, e.g. shopping run") 
+        img(src="/images/errand.png",alt="errand")
         | Errand
-      input#jobTypeHelp(type='radio',name='jobType',value='help')
-      label(for='jobTypeHelp',title='lend me a hand, e.g. a two-person job, house sit')
-        img(src='/images/helping-hand.png',alt='help')
+      input#jobTypeHelp(type="radio",name="jobType",value="help")
+      label(for="jobTypeHelp",title="lend me a hand, e.g. a two-person job, house sit")
+        img(src="/images/helping-hand.png",alt="help")
         | Helping hand
-      input#jobTypePickup(type='radio',name='jobType',value='pickup')
-      label(for='jobTypePickup',title='need transport, e.g. parcel collection')
-        img(src='/images/pickup.png',alt='pickup')
+      input#jobTypePickup(type="radio",name="jobType",value="pickup")
+      label(for="jobTypePickup",title="need transport, e.g. parcel collection")
+        img(src="/images/pickup.png",alt="pickup")
         | Pickup
-      input#jobTypeMove(type='radio',name='jobType',value='move')
-      label(for='jobTypeMove',title='need a van, e.g. moving furniture')
-        img(src='/images/move.png',alt='move')
+      input#jobTypeMove(type="radio",name="jobType",value="move")
+      label(for="jobTypeMove",title="need a van, e.g. moving furniture")
+        img(src="/images/move.png",alt="move")
         | Move
-      input#jobTypeOnline(type='radio',name='jobType',value='online')
-      label(for='jobTypeOnline',title='wholly online, e.g. research')
-        img(src='/images/online.png',alt='online')
+      input#jobTypeOnline(type="radio",name="jobType",value="online")
+      label(for="jobTypeOnline",title="wholly online, e.g. research")
+        img(src="/images/online.png",alt="online")
         | Online
 
     div.summary.field
-      label.above(for='title') Title
-        img(src='/images/public.png',alt='public',title='public, shown to everyone')
-      input#title.wide(name='title',placeholder='shop for groceries, walk my dog')
+      label.above(for="title") 
+        | Title
+        em (required)
+        img(src="/images/public.png",alt="public",title="public, shown to everyone")
+      input#title.full.required(name="title",placeholder="e.g. shop for groceries, stake out a spot in the park")
 
     div.detail.field
-      label.above(for='description') Description
-        img(src='/images/public.png',alt='public',title='public, shown to everyone')
-      textarea#description.wide(
-        name='description',
+      label.above(for="description") 
+        | Description
+        em (required)
+        img(src="/images/public.png",alt="public",title="public, shown to everyone")
+      textarea#description.full.required(
+        name="description",
         cols=50,rows=6,
-        placeholder='put in as much detail as you can; describe any items to be carried or purhcased, possibly including size and weight; the approximate time required to complete the job; any special tools required')
+        placeholder="put in as much detail as you can: describe any items to be carried or purhcased, possibly including size and weight; the approximate time required to complete the job; any special skills or tools required")
 
-  fieldset#location
-    legend Where is the job? 
+    div.detail.field
+      label.above(for="privateNotes") 
+        | Private notes
+        em (optional)
+        img(src="/images/private.png",alt="private",title="private, only shown to assigned worker")
+      textarea#privateNotes.full(
+        name="privateNotes",
+        cols=50,rows=3,
+        placeholder="any information the worker needs to know, but that you don't wish to be public")
 
-    div#oneLocation.summary.field.ui-widget
-      fieldset.panel.area.start
-        legend Location
-        label.above(for='jobSuburb') Suburb/town
-          img(src='/images/public.png',alt='public',title='public, shown to everyone')
-        input#jobSuburb.address-line.flow(placeholder='type to see suggestions')
-        fieldset.address.detail.field.area
-          legend Address
-            img(src='/images/private.png',alt='private',title='private, only shown to assigned worker')
-          div
-            label.above(for='locationName') Location Name
-            input#jobLocationName.address-line(name='jobLocationName',placeholder='e.g. my house')
-          div
-            label.above(for='jobLocationStreet') Street Address
-            input#jobLocationStreet.address-line(name='jobLocationStreet')
-          div
-            label.above Suburb, State, Postcode
-            div#jobLocationLocality.read-only.address-line
+  div#locations
+    fieldset.area.ui-widget-content
+      legend Where is the job? 
+      div.summary.field
+        label.above(for="jobSuburb")
+          | Suburb/town
+          em (required)
+          img(src="/images/public.png",alt="public",title="public, shown to everyone")
+        input#jobSuburb.wide.required(name="jobSuburb",placeholder="type to see suggestions")
+        input#jobLocationSuburbId(type="hidden",name="jobLocationSuburbId")
 
-    div#twoLocations.summary.field.ui-widget
-      fieldset.panel.summary.area.start
-        legend Starting Location
-        label.above(for='jobStartSuburb') Starting suburb/town
-          img(src='/images/public.png',alt='public',title='public, shown to everyone')
-        input#jobStartSuburb.address-line.flow(placeholder='type to see suggestions')
-        fieldset.address.detail.area.field
-          legend Address
-            img(src='/images/private.png',alt='private',title='private, only shown to assigned worker')
-          div
-            label.above(for='jobStartLocationName') Location Name
-            input#jobStartLocationName.address-line(name='jobStartLocationName',placeholder='e.g. post office')
-          div
-            label.above(for='jobStartStreet') Street Address
-            input#jobStartStreet.address-line(name='jobStartStreet')
-          div
-            label.above Suburb, State, Postcode
-            div#jobStartLocality.read-only.address-line
-          
-      div.panel
-        img.top-space(src='/images/travel-to.png',alt='to')
+      fieldset.nested.detail.area.ui-widget-content
+        legend Address
+          img(src="/images/private.png",alt="private",title="private, only shown to assigned worker")
+        div.flowing.detail.field
+          label.above(for="locationName") Location Name 
+            em (optional)
+          input#jobLocationName.narrow(name="jobLocationName",placeholder="e.g. my house")
+        div.flowing.detail.field
+          label.above(for="jobLocationStreet") Street Address 
+            em (optional)
+          input#jobLocationStreet.narrow(name="jobLocationStreet")
+        div.flowing.detail.field
+          label.above Suburb, State, Postcode
+          div#jobLocationLocality.read-only.narrow
 
-      fieldset.panel.summary.area.finish
-        legend Finishing Location
-        label.above(for='jobFinishSuburb') Finishing suburb/town
-          img(src='/images/public.png',alt='public',title='public, shown to everyone')
-        input#jobFinishSuburb.address-line.flow(placeholder='type to see suggestions')
-        fieldset.address.detail.area.field
-          legend Address 
-            img(src='/images/private.png',alt='private',title='private, only shown to assigned worker')
-          div
-            label.above(for='jobFinishLocationName') Location Name
-            input#jobFinishLocationName.address-line(name='jobFinishLocationName',placeholder='e.g. my house')
-          div
-            label.above(for='jobFinishStreet') Street Address
-            input#jobFinishStreet.address-line(name='jobFinishStreet')
-          div
-            label.above Suburb, State, Postcode
-            div#jobFinishLocality.read-only.address-line
+      div#extraLocations
+      button#addExtraLocation(type="button") Add an extra location
 
+  div.form-actions
+    input(type="submit",name="submit",value="Submit")
 
-    input#jobLocationSuburbId(type='hidden',name='jobLocationSuburbId')
-    input#jobStartSuburbId(type='hidden',name='jobStartSuburbId')
-    input#jobFinishSuburbId(type='hidden',name='jobFinishSuburbId')
+div#locationTemplate.template
+  fieldset
+    legend Extra location
+    div.summary.field
+      label.above(for="extraLocationSuburb_${id}")
+        | Suburb/town
+        em (optional)
+        img(src="/images/public.png",alt="public",title="public, shown to everyone")
+      input.wide(id="extraLocationSuburb_${id}",name="extraLocationSuburb_${id}",
+                          placeholder="type to see suggestions")
+      input(id="extraLocationSuburbId_${id}",type="hidden",name="extraLocationSuburbId_${id}")
 
-script
-  $(function() {
-    $('#jobType').buttonset();
+    fieldset.nested.detail.area.ui-widget-content
+      legend Address
+        img(src="/images/private.png",alt="private",title="private, only shown to assigned worker")
+      div.flowing.detail.field
+        label.above(for="extraLocationName_${id}") Location Name 
+          em (optional)
+        input.narrow(id="extraLocationName_${id}",name="extraLocationName_${id}",placeholder="e.g. my house")
+      div.flowing.detail.field
+        label.above(for="extraLocationStreet_${id}") Street Address 
+          em (optional)
+        input.narrow(id="extraLocationStreet_${id}",name="extraLocationStreet_${id}")
+      div.flowing.detail.field
+        label.above Suburb, State, Postcode
+        div.read-only.narrow(id="extraLocationLocality_${id}")
 
-    $('#jobTypeErrand, #jobTypePickup, #jobTypeMove, #jobTypeHelp')
-      .toggleDependentFields($('#location'));
+:coffeescript
+  $(->
+    $("#jobType").buttonset()
 
-    $('#jobTypeErrand')
-      .click(function() { $('#title').attr('placeholder', 'shop for groceries, walk my dog') });
-    $('#jobTypePickup')
-      .click(function() { $('#title').attr('placeholder', 'pickup a parcel, deliver some flowers') });
-    $('#jobTypeMove')
-      .click(function() { $('#title').attr('placeholder', 'collect a bed, office move') });
-    $('#jobTypeHelp')
-      .click(function() { $('#title').attr('placeholder', 'house sit, build a bookcase, fix my car') });
-    $('#jobTypeOnline')
-      .click(function() { $('#title').attr('placeholder', 'compare laptops, research composting') })
+    $("#jobTypeErrand")
+      .click -> $("#title").attr "placeholder", "e.g. shop for groceries, stake out a spot in the park"
 
-    $('#jobTypeErrand, #jobTypeHelp')
-      .toggleDependentFields($('#oneLocation'));
-    $('#jobTypePickup, #jobTypeMove')
-      .toggleDependentFields($('#twoLocations'));
+    $("#jobTypePickup")
+      .click -> $("#title").attr "placeholder", "e.g. pickup a parcel, deliver some flowers"
 
-    $("#jobSuburb").suggest({
-      source: '/reference/locality',
-      select: function(event, ui) {
-        if(ui.item) {
-          $('#jobLocationSuburbId').val(ui.item.id);
-          $('#jobLocationLocality').text(
-            ui.item.supplement.suburb + ', ' + 
-            ui.item.supplement.state + ' ' + 
-            ui.item.supplement.postcode);
-        }
-      }
-    });
+    $("#jobTypeMove")
+      .click -> $("#title").attr "placeholder", "e.g. collect a bed, office move"
 
-    $("#jobStartSuburb").suggest({
-      source: '/reference/locality',
-      select: function(event, ui) {
-        if(ui.item) {
-          $('#jobStartSuburbId').val(ui.item.id);
-          $('#jobStartLocality').text(
-            ui.item.supplement.suburb + ', ' + 
-            ui.item.supplement.state + ' ' + 
-            ui.item.supplement.postcode);
-        }
-      }
-    });
+    $("#jobTypeHelp")
+      .click -> $("#title").attr "placeholder", "e.g. house sit, build a bookcase, fix my car"
 
-    $("#jobFinishSuburb").suggest({
-      source: '/reference/locality',
-      select: function(event, ui) {
-        if(ui.item) {
-          $('#jobFinishSuburbId').val(ui.item.id);
-          $('#jobFinishLocality').text(
-            ui.item.supplement.suburb + ', ' + 
-            ui.item.supplement.state + ' ' + 
-            ui.item.supplement.postcode);
-        }
-      }
-    });
+    $("#jobTypeOnline")
+      .click -> $("#title").attr "placeholder", "e.g. compare laptops, research composting"
 
-  });
+    $("#jobSuburb").suggest
+      source: "/reference/locality"
+      select: (event, ui) ->
+        if(ui.item)
+          $("#jobLocationSuburbId").val ui.item.id
+          $("#jobLocationLocality").text(
+            ui.item.supplement.suburb + ", " + 
+            ui.item.supplement.state + " " + 
+            ui.item.supplement.postcode)
 
+    locationId = 0
+
+    $("#addExtraLocation").click ->
+      thisLocationId = ++locationId
+
+      $("#locationTemplate").tmpl(
+        id: thisLocationId
+      ).appendTo $("#extraLocations")
+      
+      $("#extraLocationSuburb_" + thisLocationId).suggest
+        source: "/reference/locality"
+        select: (event, ui) ->
+          if(ui.item)
+            $("#extraLocationSuburbId_" + thisLocationId).val ui.item.id
+            $("#extraLocationLocality_" + thisLocationId).text(
+              ui.item.supplement.suburb + ", " + 
+              ui.item.supplement.state + " " + 
+              ui.item.supplement.postcode)
+  )

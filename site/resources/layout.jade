@@ -2,14 +2,18 @@
 html
   head
     title= (pageTitle.get() !== null ? pageTitle.get() + ' --- ' : '') + 'Busy Beez --- Local help gets things done'
-    link(rel='stylesheet/less', href='/stylesheets/style.less')
-    script(type='text/javascript', src='/javascripts/less.js')
+    link(rel='stylesheet', type='text/css', href='/stylesheets/style.css')
     script(type='text/javascript', src='/javascripts/jquery.min.js')
     script(type='text/javascript', src='/javascripts/jquery-ui.min.js')
-    script(type='text/javascript', src='/javascripts/jquery.validation.min.js')
+    script(type='text/javascript', src='/javascripts/jquery.validate.min.js')
+    script(type='text/javascript', src='/javascripts/jquery.tmpl.min.js')
     script(type='text/javascript', src='/javascripts/jquery.form.js')
     script(type='text/javascript', src='/javascripts/suggest.js')
     script(type='text/javascript', src='/javascripts/toggleDependent.js')
   body
     != body
-
+    :coffeescript
+      $(->
+        $('form').validate
+          errorPlacement: (error, element) -> error.appendTo element.parent()
+      )

@@ -5,9 +5,6 @@
 @font-family: Helvetica, Arial, sans-serif;
 @label-color: #36f;
 @head-color: #03a;
-@area-color: #f9f9f9;
-@green-area-color: #DEFFB5;
-@red-area-color: #FCD3BD;
 
 html {
 }
@@ -58,12 +55,7 @@ h1.title {
 .area {
   border: 1px solid #cdcdcd;
   border-radius: 4px 4px;
-  background-color: @area-color;
   padding: 1ex 1em 2ex 1em;
-}
-
-.area .area {
-  background-color: white;
 }
 
 .third-pane {
@@ -88,12 +80,19 @@ h1.title {
   Forms 
 */
 
-fieldset legend {
-  font-size: 20pt;
-  color: @head-color;
+.template {
+  display: none;
 }
 
-fieldset.summary legend {
+fieldset {
+  margin-top: 1ex;
+}
+
+fieldset.nested {
+  margin-left: 2em;
+}
+
+fieldset legend {
   font-size: 16pt;
   color: @head-color;
 }
@@ -104,50 +103,84 @@ fieldset.detail legend {
 }
 
 .field {
-  margin-top: 1ex;
-  label.above {
-    display: block;
-  }
   input, select, textarea {
-    border: solid 1px #cdcdcd;
+    border: 1px solid #448;
     border-radius: 3px 3px;
+    box-shadow: 1px 1px 2px #aaa;
+  }
+  .full {
+    width: 100%;
+  }
+  .narrow {
+    width: 250px;
+  }
+  .wide {
+    width: 400px;
   }
   input:focus, select:focus, textarea:focus {
     background-color: #ffffc0;
   }
   input:-moz-placeholder,
   textarea:-moz-placeholder {
-    letter-spacing: -0.1ex;
+    letter-spacing: -0.08ex;
   }
-  .flow {
-    display: inline;
+  label {
+    font-size: 14pt;
+    color: @label-color;
+    em {
+      font-size: 10pt;
+    }
+  }
+  label.above {
+    margin-top: 0.5ex;
+    display: block;
+  }
+  label.error {
+    display: block;
+    font-size: 12pt;
+    font-weight: bold;
+    color: red;
+  }
+  input.error,
+  textarea.error,
+  select.error {
+    border-color: red;
   }
 }
 
+.flowing.field {
+  float: left;
+  margin-right: 1ex;
+}
+
 .summary {
-  label, input, select, textarea, button {
+  input, select, textarea, button {
     font-size: 16pt;
   }
-  label {
-    color: @label-color;
+  input:-moz-placeholder,
+  textarea:-moz-placeholder {
+    font-size: 12pt;
+    padding: 3pt 0 3pt 0;
   }
 }
 
 .detail {
-  label, input, select, textarea, button {
+  input, select, textarea, button {
     font-size: 12pt;
   }
-  label {
-    color: @label-color;
+  input:-moz-placeholder,
+  textarea:-moz-placeholder {
+    font-size: 10pt;
+    padding: 1.9pt 0;
   }
 }
 
 .read-only {
   background-color: #ddd;
-  border: solid 1px #cdcdcd;  
+  border: 1px solid #cdcdcd;  
   border-radius: 3px 3px;
-  height: 2ex;
-  padding: 0.25ex 0.55em 0.3ex 0.1em;
+  height: 3ex;
+  padding: 0.25ex 0 0.3ex 0;
 }
 
 .ui-autocomplete-loading { 
@@ -166,6 +199,27 @@ fieldset.detail legend {
   font-size: 9pt;
 }
 
+.form-actions {
+  margin-top: 2ex;
+  float: right;
+  input[type='submit'] {
+    padding: 1ex 1em 1ex 1em;
+    border: 3px outset #0f0;
+    border-radius: 6px;
+    color: #fff;
+    font-size: 14pt;
+    font-weight: bold;
+    text-shadow: 2pt 2pt 1.5pt #333;
+    background-color: #0d0;
+  }
+  input[type='submit']:hover {
+    background-color: #3f3;
+  }
+}
+
+button {
+  margin: 1ex 0;
+}
 
 /* 
 ** List Job 
@@ -218,7 +272,7 @@ fieldset.detail legend {
   float: right;
   clear: right;
   width: 10em;
-  border: inset 2px;
+  border: 2px inset;
   margin: 1ex 0.5em;
   padding: 0.5ex 0.5em;
 }
@@ -228,11 +282,6 @@ fieldset.detail legend {
 ** New Job 
 */
 
-.new-job .wide {
-  width: 600px;
-}
-
-
 #jobType img {
   vertical-align: middle;
 }
@@ -241,16 +290,7 @@ fieldset.detail legend {
   margin-top: 1ex;
 }
 
-.area.start {
-  background-color: @green-area-color;
-}
-
-.area.finish {
-  background-color: @red-area-color;
-}
-
 .field {
   .address-line {
-    width: 16em;
   }
 }
