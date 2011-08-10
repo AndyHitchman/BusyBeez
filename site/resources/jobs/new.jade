@@ -6,23 +6,23 @@ form#new-job(method='post',action='/jobs/new')
     legend What is the Job?
 
     div.wide.field#jobType
-      input#jobTypeErrand(type='radio',name='job[type]',value='errand',checked=(job.type=='errand' || !job.type))
+      input#jobTypeErrand(type='radio',name='type',value='errand',checked=(type=='errand' || !type))
       label(for='jobTypeErrand',title='around and about the local area, e.g. shopping run') 
         img(src='/images/errand.png',alt='errand')
         | Errand
-      input#jobTypeHelp(type='radio',name='job[type]',value='help',checked=job.type=='help')
+      input#jobTypeHelp(type='radio',name='type',value='help',checked=type=='help')
       label(for='jobTypeHelp',title='lend me a hand, e.g. a two-person job, fix my car')
         img(src='/images/helping-hand.png',alt='help')
         | Helping hand
-      input#jobTypePickup(type='radio',name='job[type]',value='pickup',checked=job.type=='pickup')
+      input#jobTypePickup(type='radio',name='type',value='pickup',checked=type=='pickup')
       label(for='jobTypePickup',title='need transport, e.g. parcel collection')
         img(src='/images/pickup.png',alt='pickup')
         | Pickup
-      input#jobTypeMove(type='radio',name='job[type]',value='move',checked=job.type=='move')
+      input#jobTypeMove(type='radio',name='type',value='move',checked=type=='move')
       label(for='jobTypeMove',title='need a van, e.g. moving furniture')
         img(src='/images/move.png',alt='move')
         | Move
-      input#jobTypeOnline(type='radio',name='job[type]',value='online',checked=job.type=='online')
+      input#jobTypeOnline(type='radio',name='type',value='online',checked=type=='online')
       label(for='jobTypeOnline',title='wholly online, e.g. research')
         img(src='/images/online.png',alt='online')
         | Online
@@ -57,28 +57,6 @@ form#new-job(method='post',action='/jobs/new')
   div#locations
     fieldset.area.ui-widget-content
       legend Where is the job? 
-      div.summary.field
-        label.above(for='jobSuburb')
-          | Suburb/town
-          em (required)
-          img(src='/images/public.png',alt='public',title='public, shown to everyone')
-        input#jobSuburb.wide.required(name='jobSuburb',placeholder='type to see suggestions')
-        input#jobLocationSuburbId(type='hidden',name='jobLocationSuburbId')
-
-      fieldset.nested.detail.area.ui-widget-content
-        legend Address
-          img(src='/images/private.png',alt='private',title='private, only shown to assigned worker')
-        div.flowing.detail.field
-          label.above(for='locationName') Location Name 
-            em (optional)
-          input#jobLocationName.narrow(name='jobLocationName',placeholder='e.g. my house')
-        div.flowing.detail.field
-          label.above(for='jobLocationStreet') Street Address 
-            em (optional)
-          input#jobLocationStreet.narrow(name='jobLocationStreet')
-        div.flowing.detail.field
-          label.above Suburb, State, Postcode
-          div#jobLocationLocality.read-only.narrow
 
       div#extraLocations
       button#addExtraLocation(type='button') Add an extra location
@@ -88,30 +66,28 @@ form#new-job(method='post',action='/jobs/new')
 
 div#locationTemplate.template
   fieldset
-    legend Extra location
     div.summary.field
-      label.above(for='extraLocationSuburb_${id}')
+      label.above(for='locationSuburb_${locationNo}')
         | Suburb/town
         em (optional)
         img(src='/images/public.png',alt='public',title='public, shown to everyone')
-      input.wide(id='extraLocationSuburb_${id}',name='extraLocationSuburb_${id}',
-                          placeholder='type to see suggestions')
-      input(id='extraLocationSuburbId_${id}',type='hidden',name='extraLocationSuburbId_${id}')
+      input.wide(id='locationSuburb_${locationNo}',name='location[${locationNo}][suburb]',placeholder='type to see suggestions')
+      input(id='locationSuburbId_${locationNo}',type='hidden',name='location[${locationNo}][id]')
 
     fieldset.nested.detail.area.ui-widget-content
       legend Address
         img(src='/images/private.png',alt='private',title='private, only shown to assigned worker')
       div.flowing.detail.field
-        label.above(for='extraLocationName_${id}') Location Name 
+        label.above(for='locationName_${locationNo}') Location Name 
           em (optional)
-        input.narrow(id='extraLocationName_${id}',name='extraLocationName_${id}',placeholder='e.g. my house')
+        input.narrow(id='locationName_${locationNo}',name='location[${locationNo}][name]',placeholder='e.g. my house')
       div.flowing.detail.field
-        label.above(for='extraLocationStreet_${id}') Street Address 
+        label.above(for='locationStreet_${locationNo}') Street Address 
           em (optional)
-        input.narrow(id='extraLocationStreet_${id}',name='extraLocationStreet_${id}')
+        input.narrow(id='locationStreet_${locationNo}',name='location[${locationNo}][street]')
       div.flowing.detail.field
         label.above Suburb, State, Postcode
-        div.read-only.narrow(id='extraLocationLocality_${id}')
+        div.read-only.narrow(id='locationLocality_${locationNo}')
 
 :coffeescript
   $(->
@@ -145,32 +121,24 @@ div#locationTemplate.template
     $('#jobTypeErrand, #jobTypePickup, #jobTypeMove, #jobTypeHelp')
       .toggleDependentFields $('#locations')
 
-    $('#jobSuburb').suggest
-      source: '/reference/locality'
-      select: (event, ui) ->
-        if(ui.item)
-          $('#jobLocationSuburbId').val ui.item.id
-          $('#jobLocationLocality').text(
-            ui.item.supplement.suburb + ', ' + 
-            ui.item.supplement.state + ' ' + 
-            ui.item.supplement.postcode)
-
-    locationId = 0
+    locationNo = 0
 
     $('#addExtraLocation').click ->
-      thisLocationId = ++locationId
+      thisLocationNo = locationNo++
 
       $('#locationTemplate').tmpl(
-        id: thisLocationId
+        locationNo: thisLocationNo
       ).appendTo $('#extraLocations')
       
-      $('#extraLocationSuburb_' + thisLocationId).suggest
+      $('#locationSuburb_' + thisLocationNo).suggest
         source: '/reference/locality'
         select: (event, ui) ->
           if(ui.item)
-            $('#extraLocationSuburbId_' + thisLocationId).val ui.item.id
-            $('#extraLocationLocality_' + thisLocationId).text(
+            $('#locationSuburbId_' + thisLocationNo).val ui.item.id
+            $('#locationLocality_' + thisLocationNo).text(
               ui.item.supplement.suburb + ', ' + 
               ui.item.supplement.state + ' ' + 
               ui.item.supplement.postcode)
+    
+    $('#addExtraLocation').click()
   )

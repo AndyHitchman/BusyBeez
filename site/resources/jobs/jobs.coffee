@@ -13,8 +13,7 @@ module.exports = (app, db) ->
 
   app.get '/jobs/new', (req, res) ->
     res.render 'jobs/new',
-      job: 
-        type: 'online'
+      type: 'online'
   
-  #app.post '/jobs/new', (req, res) ->
-    
+  app.post '/jobs/new', (req, res) ->
+    console.log req.body
