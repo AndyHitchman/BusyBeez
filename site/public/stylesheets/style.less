@@ -3,7 +3,7 @@
 @import "/stylesheets/jquery-ui.css";
 
 @font-family: Helvetica, Arial, sans-serif;
-@label-color: #36f;
+@label-color: #13d;
 @head-color: #03a;
 
 html {
@@ -102,11 +102,15 @@ fieldset.detail legend {
   color: @head-color;
 }
 
-.field {
-  input, select, textarea {
+.input-borders {
     border: 1px solid #448;
     border-radius: 3px 3px;
     box-shadow: 1px 1px 2px #aaa;
+}
+
+.field {
+  input, select, textarea {
+    .input-borders;
   }
   .full {
     width: 100%;
@@ -177,8 +181,7 @@ fieldset.detail legend {
 
 .read-only {
   background-color: #ddd;
-  border: 1px solid #cdcdcd;  
-  border-radius: 3px 3px;
+  .input-borders;
   height: 3ex;
   padding: 0.25ex 0 0.3ex 0;
 }

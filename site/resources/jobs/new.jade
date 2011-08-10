@@ -1,163 +1,176 @@
-- pageTitle.set("List a New Job")
+- pageTitle.set('List a New Job')
 h1= pageTitle.get()
-form#new-job(method="post",action="/jobs/new")
+form#new-job(method='post',action='/jobs/new')
 
   fieldset#description.area.ui-widget-content
     legend What is the Job?
 
     div.wide.field#jobType
-      input#jobTypeErrand(type="radio",name="jobType",value="errand",checked)
-      label(for="jobTypeErrand",title="around and about the local area, e.g. shopping run") 
-        img(src="/images/errand.png",alt="errand")
+      input#jobTypeErrand(type='radio',name='job[type]',value='errand',checked=(job.type=='errand' || !job.type))
+      label(for='jobTypeErrand',title='around and about the local area, e.g. shopping run') 
+        img(src='/images/errand.png',alt='errand')
         | Errand
-      input#jobTypeHelp(type="radio",name="jobType",value="help")
-      label(for="jobTypeHelp",title="lend me a hand, e.g. a two-person job, house sit")
-        img(src="/images/helping-hand.png",alt="help")
+      input#jobTypeHelp(type='radio',name='job[type]',value='help',checked=job.type=='help')
+      label(for='jobTypeHelp',title='lend me a hand, e.g. a two-person job, fix my car')
+        img(src='/images/helping-hand.png',alt='help')
         | Helping hand
-      input#jobTypePickup(type="radio",name="jobType",value="pickup")
-      label(for="jobTypePickup",title="need transport, e.g. parcel collection")
-        img(src="/images/pickup.png",alt="pickup")
+      input#jobTypePickup(type='radio',name='job[type]',value='pickup',checked=job.type=='pickup')
+      label(for='jobTypePickup',title='need transport, e.g. parcel collection')
+        img(src='/images/pickup.png',alt='pickup')
         | Pickup
-      input#jobTypeMove(type="radio",name="jobType",value="move")
-      label(for="jobTypeMove",title="need a van, e.g. moving furniture")
-        img(src="/images/move.png",alt="move")
+      input#jobTypeMove(type='radio',name='job[type]',value='move',checked=job.type=='move')
+      label(for='jobTypeMove',title='need a van, e.g. moving furniture')
+        img(src='/images/move.png',alt='move')
         | Move
-      input#jobTypeOnline(type="radio",name="jobType",value="online")
-      label(for="jobTypeOnline",title="wholly online, e.g. research")
-        img(src="/images/online.png",alt="online")
+      input#jobTypeOnline(type='radio',name='job[type]',value='online',checked=job.type=='online')
+      label(for='jobTypeOnline',title='wholly online, e.g. research')
+        img(src='/images/online.png',alt='online')
         | Online
 
     div.summary.field
-      label.above(for="title") 
+      label.above(for='title') 
         | Title
         em (required)
-        img(src="/images/public.png",alt="public",title="public, shown to everyone")
-      input#title.full.required(name="title",placeholder="e.g. shop for groceries, stake out a spot in the park")
+        img(src='/images/public.png',alt='public',title='public, shown to everyone')
+      input#title.full.required(name='title',placeholder='e.g. shop for groceries, stake out a spot in the park')
 
     div.detail.field
-      label.above(for="description") 
+      label.above(for='description') 
         | Description
         em (required)
-        img(src="/images/public.png",alt="public",title="public, shown to everyone")
+        img(src='/images/public.png',alt='public',title='public, shown to everyone')
       textarea#description.full.required(
-        name="description",
+        name='description',
         cols=50,rows=6,
-        placeholder="put in as much detail as you can: describe any items to be carried or purhcased, possibly including size and weight; the approximate time required to complete the job; any special skills or tools required")
+        placeholder='put in as much detail as you can: describe any items to be carried or purhcased, possibly including size and weight; the approximate time required to complete the job; any special skills or tools required')
 
     div.detail.field
-      label.above(for="privateNotes") 
+      label.above(for='privateNotes') 
         | Private notes
         em (optional)
-        img(src="/images/private.png",alt="private",title="private, only shown to assigned worker")
+        img(src='/images/private.png',alt='private',title='private, only shown to assigned worker')
       textarea#privateNotes.full(
-        name="privateNotes",
+        name='privateNotes',
         cols=50,rows=3,
-        placeholder="any information the worker needs to know, but that you don't wish to be public")
+        placeholder='any information the worker needs to know, but that you don&apos;t wish to be public')
 
   div#locations
     fieldset.area.ui-widget-content
       legend Where is the job? 
       div.summary.field
-        label.above(for="jobSuburb")
+        label.above(for='jobSuburb')
           | Suburb/town
           em (required)
-          img(src="/images/public.png",alt="public",title="public, shown to everyone")
-        input#jobSuburb.wide.required(name="jobSuburb",placeholder="type to see suggestions")
-        input#jobLocationSuburbId(type="hidden",name="jobLocationSuburbId")
+          img(src='/images/public.png',alt='public',title='public, shown to everyone')
+        input#jobSuburb.wide.required(name='jobSuburb',placeholder='type to see suggestions')
+        input#jobLocationSuburbId(type='hidden',name='jobLocationSuburbId')
 
       fieldset.nested.detail.area.ui-widget-content
         legend Address
-          img(src="/images/private.png",alt="private",title="private, only shown to assigned worker")
+          img(src='/images/private.png',alt='private',title='private, only shown to assigned worker')
         div.flowing.detail.field
-          label.above(for="locationName") Location Name 
+          label.above(for='locationName') Location Name 
             em (optional)
-          input#jobLocationName.narrow(name="jobLocationName",placeholder="e.g. my house")
+          input#jobLocationName.narrow(name='jobLocationName',placeholder='e.g. my house')
         div.flowing.detail.field
-          label.above(for="jobLocationStreet") Street Address 
+          label.above(for='jobLocationStreet') Street Address 
             em (optional)
-          input#jobLocationStreet.narrow(name="jobLocationStreet")
+          input#jobLocationStreet.narrow(name='jobLocationStreet')
         div.flowing.detail.field
           label.above Suburb, State, Postcode
           div#jobLocationLocality.read-only.narrow
 
       div#extraLocations
-      button#addExtraLocation(type="button") Add an extra location
+      button#addExtraLocation(type='button') Add an extra location
 
   div.form-actions
-    input(type="submit",name="submit",value="Submit")
+    input(type='submit',name='submit',value='Submit')
 
 div#locationTemplate.template
   fieldset
     legend Extra location
     div.summary.field
-      label.above(for="extraLocationSuburb_${id}")
+      label.above(for='extraLocationSuburb_${id}')
         | Suburb/town
         em (optional)
-        img(src="/images/public.png",alt="public",title="public, shown to everyone")
-      input.wide(id="extraLocationSuburb_${id}",name="extraLocationSuburb_${id}",
-                          placeholder="type to see suggestions")
-      input(id="extraLocationSuburbId_${id}",type="hidden",name="extraLocationSuburbId_${id}")
+        img(src='/images/public.png',alt='public',title='public, shown to everyone')
+      input.wide(id='extraLocationSuburb_${id}',name='extraLocationSuburb_${id}',
+                          placeholder='type to see suggestions')
+      input(id='extraLocationSuburbId_${id}',type='hidden',name='extraLocationSuburbId_${id}')
 
     fieldset.nested.detail.area.ui-widget-content
       legend Address
-        img(src="/images/private.png",alt="private",title="private, only shown to assigned worker")
+        img(src='/images/private.png',alt='private',title='private, only shown to assigned worker')
       div.flowing.detail.field
-        label.above(for="extraLocationName_${id}") Location Name 
+        label.above(for='extraLocationName_${id}') Location Name 
           em (optional)
-        input.narrow(id="extraLocationName_${id}",name="extraLocationName_${id}",placeholder="e.g. my house")
+        input.narrow(id='extraLocationName_${id}',name='extraLocationName_${id}',placeholder='e.g. my house')
       div.flowing.detail.field
-        label.above(for="extraLocationStreet_${id}") Street Address 
+        label.above(for='extraLocationStreet_${id}') Street Address 
           em (optional)
-        input.narrow(id="extraLocationStreet_${id}",name="extraLocationStreet_${id}")
+        input.narrow(id='extraLocationStreet_${id}',name='extraLocationStreet_${id}')
       div.flowing.detail.field
         label.above Suburb, State, Postcode
-        div.read-only.narrow(id="extraLocationLocality_${id}")
+        div.read-only.narrow(id='extraLocationLocality_${id}')
 
 :coffeescript
   $(->
-    $("#jobType").buttonset()
+    $('#jobType').buttonset()
 
-    $("#jobTypeErrand")
-      .click -> $("#title").attr "placeholder", "e.g. shop for groceries, stake out a spot in the park"
+    $('#jobTypeErrand')
+      .click -> 
+        $('#title').attr 'placeholder', 'e.g. shop for groceries, stake out a spot in the park'
+      .filter(':checked').click()
 
-    $("#jobTypePickup")
-      .click -> $("#title").attr "placeholder", "e.g. pickup a parcel, deliver some flowers"
+    $('#jobTypePickup')
+      .click -> 
+        $('#title').attr 'placeholder', 'e.g. pickup a parcel, deliver some flowers'
+      .filter(':checked').click()
 
-    $("#jobTypeMove")
-      .click -> $("#title").attr "placeholder", "e.g. collect a bed, office move"
+    $('#jobTypeMove')
+      .click -> 
+        $('#title').attr 'placeholder', 'e.g. collect a bed, office move'
+      .filter(':checked').click()
 
-    $("#jobTypeHelp")
-      .click -> $("#title").attr "placeholder", "e.g. house sit, build a bookcase, fix my car"
+    $('#jobTypeHelp')
+      .click -> 
+        $('#title').attr 'placeholder', 'e.g. build a bookcase, fix my car'
+      .filter(':checked').click()
 
-    $("#jobTypeOnline")
-      .click -> $("#title").attr "placeholder", "e.g. compare laptops, research composting"
+    $('#jobTypeOnline')
+      .click -> 
+        $('#title').attr('placeholder', 'e.g. compare laptops, research composting')
+      .filter(':checked').click()
 
-    $("#jobSuburb").suggest
-      source: "/reference/locality"
+    $('#jobTypeErrand, #jobTypePickup, #jobTypeMove, #jobTypeHelp')
+      .toggleDependentFields $('#locations')
+
+    $('#jobSuburb').suggest
+      source: '/reference/locality'
       select: (event, ui) ->
         if(ui.item)
-          $("#jobLocationSuburbId").val ui.item.id
-          $("#jobLocationLocality").text(
-            ui.item.supplement.suburb + ", " + 
-            ui.item.supplement.state + " " + 
+          $('#jobLocationSuburbId').val ui.item.id
+          $('#jobLocationLocality').text(
+            ui.item.supplement.suburb + ', ' + 
+            ui.item.supplement.state + ' ' + 
             ui.item.supplement.postcode)
 
     locationId = 0
 
-    $("#addExtraLocation").click ->
+    $('#addExtraLocation').click ->
       thisLocationId = ++locationId
 
-      $("#locationTemplate").tmpl(
+      $('#locationTemplate').tmpl(
         id: thisLocationId
-      ).appendTo $("#extraLocations")
+      ).appendTo $('#extraLocations')
       
-      $("#extraLocationSuburb_" + thisLocationId).suggest
-        source: "/reference/locality"
+      $('#extraLocationSuburb_' + thisLocationId).suggest
+        source: '/reference/locality'
         select: (event, ui) ->
           if(ui.item)
-            $("#extraLocationSuburbId_" + thisLocationId).val ui.item.id
-            $("#extraLocationLocality_" + thisLocationId).text(
-              ui.item.supplement.suburb + ", " + 
-              ui.item.supplement.state + " " + 
+            $('#extraLocationSuburbId_' + thisLocationId).val ui.item.id
+            $('#extraLocationLocality_' + thisLocationId).text(
+              ui.item.supplement.suburb + ', ' + 
+              ui.item.supplement.state + ' ' + 
               ui.item.supplement.postcode)
   )
