@@ -4,6 +4,8 @@ module.exports = (app, db) ->
   app.get '/reference/locality', (req, res) ->
     max = 10
     match = '^' + req.param('term').split('(')[0]
+    match += '$' if req.param('exact')
+    console.log match
 
     db.collection('localities')
       .find({locality: { $regex : match, $options: 'i'}})

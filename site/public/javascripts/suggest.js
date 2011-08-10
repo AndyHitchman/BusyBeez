@@ -36,18 +36,37 @@
           }
         });
 
-        $this.autocomplete(config)
-          .blur(function() { $info.text('') });
+        $this.autocomplete(config);
+        $this.blur(function() { $info.text('') });
 
         if(config.supplement) {
-          $this
-            .data('autocomplete')._renderItem = function(ul, item) {
-              return $('<li></li>')
-	              .data('item.autocomplete', item)
-	              .append('<a>' + item.label + config.supplement(item.supplement) + '</a>')
-        				.appendTo(ul);
-            };
+          $this.data('autocomplete')._renderItem = function(ul, item) {
+            return $('<li></li>')
+              .data('item.autocomplete', item)
+              .append('<a>' + item.label + config.supplement(item.supplement) + '</a>')
+      				.appendTo(ul);
+          };
         }
+
+        $this.bind( "autocompletechange", function(event, ui) {
+          if(!ui.item) {
+            //Nothing selected, but possible a valid value. See if one result returned.
+            $.getJSON(settings.source, 'exact=true&term='+$this.val(), function(data) {  
+              if(data.meta.matches == 1) {
+                $this.data('autocomplete')
+                  .options
+                  .select(event, { 
+                    item: {
+                      label: data.items[0].label, 
+                      id: data.items[0].id, 
+                      supplement: data.items[0].supplement 
+                    }
+                  });
+              }
+            });
+          }
+        });
+
     });
   };
 })( jQuery );

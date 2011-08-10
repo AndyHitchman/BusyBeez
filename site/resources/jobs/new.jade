@@ -168,13 +168,14 @@ div#locationTemplate.template
         source: '/reference/locality'
         select: (event, ui) ->
           if(ui.item)
+            $('#locationSuburb_' + thisLocationNo).val ui.item.label
             $('#locationSuburb_' + thisLocationNo + '_id').val ui.item.id
             $('#locationLocality_' + thisLocationNo).text(
               ui.item.supplement.suburb + ', ' + 
               ui.item.supplement.state + ' ' + 
-              ui.item.supplement.postcode)
-        search: ->
-          $('#locationSuburb_' + thisLocationNo + '_id').val('')
+              ui.item.supplement.postcode)            
+            $('#locationSuburb_' + thisLocationNo).valid()
+        search: -> $('#locationSuburb_' + thisLocationNo + '_id').val('')
         supplement: (s) ->  ' (' + s.state + ')'
 
     bindSuggest 0
