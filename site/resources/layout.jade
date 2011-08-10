@@ -12,8 +12,3 @@ html
     script(type='text/javascript', src='/javascripts/toggleDependent.js')
   body
     != body
-    :coffeescript
-      $(->
-        $('form').validate
-          errorPlacement: (error, element) -> error.appendTo element.parent()
-      )

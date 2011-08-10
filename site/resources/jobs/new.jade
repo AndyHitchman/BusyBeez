@@ -58,6 +58,30 @@ form#new-job(method='post',action='/jobs/new')
     fieldset.area.ui-widget-content
       legend Where is the job? 
 
+      fieldset
+        div.summary.field
+          label.above(for='locationSuburb_0')
+            | Suburb/town
+            em (required)
+            img(src='/images/public.png',alt='public',title='public, shown to everyone')
+          input.suburb.wide(id='locationSuburb_0',name='location[0][suburb]',placeholder='type to see suggestions')
+          input(id='locationSuburb_0_id',type='hidden',name='location[0][id]',value='')
+
+        fieldset.nested.detail.area.ui-widget-content
+          legend Address
+            img(src='/images/private.png',alt='private',title='private, only shown to assigned worker')
+          div.flowing.detail.field
+            label.above(for='locationName_0') Location Name 
+              em (optional)
+            input.narrow(id='locationName_0',name='location[0][name]',placeholder='e.g. my house')
+          div.flowing.detail.field
+            label.above(for='locationStreet_0') Street Address 
+              em (optional)
+            input.narrow(id='locationStreet_0',name='location[0][street]')
+          div.flowing.detail.field
+            label.above Suburb, State, Postcode
+            div.read-only.narrow(id='locationLocality_0')
+
       div#extraLocations
       button#addExtraLocation(type='button') Add an extra location
 
@@ -71,8 +95,8 @@ div#locationTemplate.template
         | Suburb/town
         em (optional)
         img(src='/images/public.png',alt='public',title='public, shown to everyone')
-      input.wide(id='locationSuburb_${locationNo}',name='location[${locationNo}][suburb]',placeholder='type to see suggestions')
-      input(id='locationSuburbId_${locationNo}',type='hidden',name='location[${locationNo}][id]')
+      input.suburb.wide(id='locationSuburb_${locationNo}',name='location[${locationNo}][suburb]',placeholder='type to see suggestions')
+      input(id='locationSuburb_${locationNo}_id',type='hidden',name='location[${locationNo}][id]',value='')
 
     fieldset.nested.detail.area.ui-widget-content
       legend Address
@@ -91,6 +115,13 @@ div#locationTemplate.template
 
 :coffeescript
   $(->
+    $.validator.addMethod "suburb", 
+      (value, element) -> $('#' + element.id + '_id').val() != ''
+      'Please select a suburb'
+
+    $('form').validate
+      errorPlacement: (error, element) -> error.appendTo element.parent()
+
     $('#jobType').buttonset()
 
     $('#jobTypeErrand')
@@ -121,7 +152,7 @@ div#locationTemplate.template
     $('#jobTypeErrand, #jobTypePickup, #jobTypeMove, #jobTypeHelp')
       .toggleDependentFields $('#locations')
 
-    locationNo = 0
+    locationNo = 1
 
     $('#addExtraLocation').click ->
       thisLocationNo = locationNo++
@@ -130,15 +161,21 @@ div#locationTemplate.template
         locationNo: thisLocationNo
       ).appendTo $('#extraLocations')
       
+      bindSuggest thisLocationNo
+
+    bindSuggest = (thisLocationNo) ->       
       $('#locationSuburb_' + thisLocationNo).suggest
         source: '/reference/locality'
         select: (event, ui) ->
           if(ui.item)
-            $('#locationSuburbId_' + thisLocationNo).val ui.item.id
+            $('#locationSuburb_' + thisLocationNo + '_id').val ui.item.id
             $('#locationLocality_' + thisLocationNo).text(
               ui.item.supplement.suburb + ', ' + 
               ui.item.supplement.state + ' ' + 
               ui.item.supplement.postcode)
-    
-    $('#addExtraLocation').click()
+        search: ->
+          $('#locationSuburb_' + thisLocationNo + '_id').val('')
+        supplement: (s) ->  ' (' + s.state + ')'
+
+    bindSuggest 0
   )
