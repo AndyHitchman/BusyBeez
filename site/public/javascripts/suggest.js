@@ -48,20 +48,16 @@
           };
         }
 
-        $this.bind( "autocompletechange", function(event, ui) {
-          if(!ui.item) {
+        $this.blur(function() {
+          var item = $this.data('autocomplete').selectedItem;
+          if(!item) {
             //Nothing selected, but possible a valid value. See if one result returned.
             $.getJSON(settings.source, 'exact=true&term='+$this.val(), function(data) {  
               if(data.meta.matches == 1) {
+                var ui = { item: data.items[0] };
+                //Treat it as selected.
                 $this.data('autocomplete')
-                  .options
-                  .select(event, { 
-                    item: {
-                      label: data.items[0].label, 
-                      id: data.items[0].id, 
-                      supplement: data.items[0].supplement 
-                    }
-                  });
+                  .options.select(null, ui);
               }
             });
           }

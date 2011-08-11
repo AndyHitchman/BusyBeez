@@ -64,8 +64,8 @@ form#new-job(method='post',action='/jobs/new')
             | Suburb/town
             em (required)
             img(src='/images/public.png',alt='public',title='public, shown to everyone')
-          input.suburb.wide(id='locationSuburb_0',name='location[0][suburb]',placeholder='type to see suggestions')
-          input(id='locationSuburb_0_id',type='hidden',name='location[0][id]',value='')
+          input.required.suburb.wide(id='locationSuburb_0',name='locations[0][suburb]',placeholder='type to see suggestions')
+          input(id='locationSuburb_0_id',type='hidden',name='locations[0][id]',value='')
 
         fieldset.nested.detail.area.ui-widget-content
           legend Address
@@ -73,11 +73,11 @@ form#new-job(method='post',action='/jobs/new')
           div.flowing.detail.field
             label.above(for='locationName_0') Location Name 
               em (optional)
-            input.narrow(id='locationName_0',name='location[0][name]',placeholder='e.g. my house')
+            input.narrow(id='locationName_0',name='locations[0][name]',placeholder='e.g. my house')
           div.flowing.detail.field
             label.above(for='locationStreet_0') Street Address 
               em (optional)
-            input.narrow(id='locationStreet_0',name='location[0][street]')
+            input.narrow(id='locationStreet_0',name='locations[0][street]')
           div.flowing.detail.field
             label.above Suburb, State, Postcode
             div.read-only.narrow(id='locationLocality_0')
@@ -95,8 +95,8 @@ div#locationTemplate.template
         | Suburb/town
         em (optional)
         img(src='/images/public.png',alt='public',title='public, shown to everyone')
-      input.suburb.wide(id='locationSuburb_${locationNo}',name='location[${locationNo}][suburb]',placeholder='type to see suggestions')
-      input(id='locationSuburb_${locationNo}_id',type='hidden',name='location[${locationNo}][id]',value='')
+      input.required.suburb.wide(id='locationSuburb_${locationNo}',name='locations[${locationNo}][suburb]',placeholder='type to see suggestions')
+      input(id='locationSuburb_${locationNo}_id',type='hidden',name='locations[${locationNo}][id]',value='')
 
     fieldset.nested.detail.area.ui-widget-content
       legend Address
@@ -104,11 +104,11 @@ div#locationTemplate.template
       div.flowing.detail.field
         label.above(for='locationName_${locationNo}') Location Name 
           em (optional)
-        input.narrow(id='locationName_${locationNo}',name='location[${locationNo}][name]',placeholder='e.g. my house')
+        input.narrow(id='locationName_${locationNo}',name='locations[${locationNo}][name]',placeholder='e.g. my house')
       div.flowing.detail.field
         label.above(for='locationStreet_${locationNo}') Street Address 
           em (optional)
-        input.narrow(id='locationStreet_${locationNo}',name='location[${locationNo}][street]')
+        input.narrow(id='locationStreet_${locationNo}',name='locations[${locationNo}][street]')
       div.flowing.detail.field
         label.above Suburb, State, Postcode
         div.read-only.narrow(id='locationLocality_${locationNo}')
