@@ -37,6 +37,7 @@ app.dynamicHelpers {
 require('./resources/home/home.coffee')(app)
 require('./resources/jobs/jobs.coffee')(app)
 require('./resources/reference/locality.coffee')(app)
+require('./resources/reference/fakelogin.coffee')(app)
 
 app.listen 3000
 console.log "Express server listening on port #{app.address().port}, in #{app.settings.env} mode"

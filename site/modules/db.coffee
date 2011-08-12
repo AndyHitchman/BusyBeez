@@ -1,4 +1,6 @@
 mongoskin = require 'mongoskin'
 
-exports.db = mongoskin.db('localhost/busybeez')
+client = mongoskin.db 'localhost/busybeez'
 
+exports.db = client
+exports.ObjectId = client.db.bson_serializer.ObjectID
