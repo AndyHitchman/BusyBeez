@@ -3,11 +3,9 @@
   Module dependencies.
 ### 
 
-express = require 'express'
-property = require './property.coffee'
-mongoskin = require 'mongoskin'
 require 'less'
-
+express = require 'express'
+property = require './modules/property.coffee'
 app = module.exports = express.createServer();
 
 # Configuration
@@ -16,6 +14,8 @@ app.configure () ->
   app.set 'views', __dirname + '/resources'
   app.set 'view engine', 'jade'
   app.use express.bodyParser()
+  app.use express.cookieParser()
+  app.use express.session { secret: "Lady Ada Byron" }
   app.use express.methodOverride()
   app.use express.compiler { src: __dirname + '/public', enable: ['less'] }
   app.use app.router
@@ -31,13 +31,12 @@ app.dynamicHelpers {
     pageTitle: property.create()
   }
 
-db = mongoskin.db 'localhost/busybeez'
 
 # Resources
 
-require('./resources/home/home.coffee')(app, db)
-require('./resources/jobs/jobs.coffee')(app, db)
-require('./resources/reference/locality.coffee')(app, db)
+require('./resources/home/home.coffee')(app)
+require('./resources/jobs/jobs.coffee')(app)
+require('./resources/reference/locality.coffee')(app)
 
 app.listen 3000
 console.log "Express server listening on port #{app.address().port}, in #{app.settings.env} mode"

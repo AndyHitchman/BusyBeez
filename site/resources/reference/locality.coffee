@@ -1,6 +1,7 @@
 _ = require 'underscore'
+db = require('../../modules/db.coffee').db
 
-module.exports = (app, db) ->
+module.exports = (app) ->
   app.get '/reference/locality', (req, res) ->
     max = 10
     match = '^' + req.param('term').split('(')[0]
