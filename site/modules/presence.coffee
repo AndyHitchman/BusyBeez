@@ -1,7 +1,7 @@
 db = require('./db.coffee').db
 ObjectId = require('./db.coffee').ObjectId
 
-exports.presence =
+exports.Presence =
   loggedOnUser: (req, res, next) ->
     userId = req.session.userId
     if userId?

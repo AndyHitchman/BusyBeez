@@ -1,3 +1,8 @@
+mixin private
+  img(src='/images/private.png',alt='private',title='private, only shown to assigned worker')
+mixin public
+  img(src='/images/public.png',alt='public',title='public, shown to everyone')
+
 - pageTitle.set('List a New Job')
 h1= pageTitle.get()
 form#new-job(method='post',action='/jobs/new')
@@ -31,28 +36,18 @@ form#new-job(method='post',action='/jobs/new')
       label.above(for='title') 
         | Title
         em (required)
-        img(src='/images/public.png',alt='public',title='public, shown to everyone')
+        mixin public
       input#title.full.required(name='title',placeholder='e.g. shop for groceries, stake out a spot in the park')
 
     div.detail.field
       label.above(for='description') 
         | Description
         em (required)
-        img(src='/images/public.png',alt='public',title='public, shown to everyone')
+        mixin public
       textarea#description.full.required(
         name='description',
         cols=50,rows=6,
         placeholder='put in as much detail as you can: describe any items to be carried or purhcased, possibly including size and weight; the approximate time required to complete the job; any special skills or tools required')
-
-    div.detail.field
-      label.above(for='privateNotes') 
-        | Private notes
-        em (optional)
-        img(src='/images/private.png',alt='private',title='private, only shown to assigned worker')
-      textarea#privateNotes.full(
-        name='privateNotes',
-        cols=50,rows=3,
-        placeholder='any information the worker needs to know, but that you don&apos;t wish to be public')
 
   div#locations
     fieldset.area.ui-widget-content
@@ -63,13 +58,13 @@ form#new-job(method='post',action='/jobs/new')
           label.above(for='locationSuburb_0')
             | Suburb/town
             em (required)
-            img(src='/images/public.png',alt='public',title='public, shown to everyone')
+            mixin public
           input.required.suburb.wide(id='locationSuburb_0',name='locations[0][suburb]',placeholder='type to see suggestions')
           input(id='locationSuburb_0_id',type='hidden',name='locations[0][id]',value='')
 
         fieldset.nested.detail.area.ui-widget-content
           legend Address
-            img(src='/images/private.png',alt='private',title='private, only shown to assigned worker')
+            mixin private
           div.flowing.detail.field
             label.above(for='locationName_0') Location Name 
               em (optional)
@@ -85,6 +80,44 @@ form#new-job(method='post',action='/jobs/new')
       div#extraLocations
       button#addExtraLocation(type='button') Add an extra location
 
+  fieldset.area.ui-widget-content
+    legend Other information about the job?
+
+    div.detail.field
+      label.above(for='timing') 
+        | Timing
+        em (required)
+        mixin public
+      div
+        | The job must be completed 
+        select#timing.required(name='timing')
+          option(value='before') Before
+          option(value='on') On
+
+        select#completionDate.required(name='completionDate')
+          - each date in possibleCompletionDates
+            option(value=date.value)= date.text
+
+    div.detail.field
+      label.above(for='expenses') 
+        | Expenses 
+        em (optional)
+        mixin public
+      | Up to $
+      input#expenses.money(name='expenses')
+      |  will be re-imbursed to the worker
+
+    div.detail.field
+      label.above(for='privateNotes') 
+        | Private notes
+        em (optional)
+        mixin private
+      textarea#privateNotes.full(
+        name='privateNotes',
+        cols=50,rows=3,
+        placeholder='any information the worker needs to know, but that you don&apos;t wish to be public')
+
+
   div.form-actions
     input(type='submit',name='submit',value='Submit')
 
@@ -94,13 +127,13 @@ div#locationTemplate.template
       label.above(for='locationSuburb_${locationNo}')
         | Suburb/town
         em (optional)
-        img(src='/images/public.png',alt='public',title='public, shown to everyone')
+        mixin public
       input.required.suburb.wide(id='locationSuburb_${locationNo}',name='locations[${locationNo}][suburb]',placeholder='type to see suggestions')
       input(id='locationSuburb_${locationNo}_id',type='hidden',name='locations[${locationNo}][id]',value='')
 
     fieldset.nested.detail.area.ui-widget-content
       legend Address
-        img(src='/images/private.png',alt='private',title='private, only shown to assigned worker')
+        mixin private
       div.flowing.detail.field
         label.above(for='locationName_${locationNo}') Location Name 
           em (optional)
