@@ -1,5 +1,7 @@
 mixin private
   img(src='/images/private.png',alt='private',title='private, only shown to assigned worker')
+mixin secure
+  img(src='/images/private.png',alt='private',title='private, not shown to anyone')
 mixin public
   img(src='/images/public.png',alt='public',title='public, shown to everyone')
 
@@ -8,7 +10,7 @@ h1= pageTitle.get()
 form#new-job(method='post',action='/jobs/new')
 
   fieldset#description.area.ui-widget-content
-    legend What is the Job?
+    legend What is the job?
 
     div.wide.field#jobType
       input#jobTypeErrand(type='radio',name='type',value='errand',checked=(type=='errand' || !type))
@@ -32,7 +34,7 @@ form#new-job(method='post',action='/jobs/new')
         img(src='/images/online.png',alt='online')
         | Online
 
-    div.summary.field
+    div.important.field
       label.above(for='title') 
         | Title
         em (required)
@@ -54,7 +56,7 @@ form#new-job(method='post',action='/jobs/new')
       legend Where is the job? 
 
       fieldset
-        div.summary.field
+        div.important.field
           label.above(for='locationSuburb_0')
             | Suburb/town
             em (required)
@@ -62,7 +64,7 @@ form#new-job(method='post',action='/jobs/new')
           input.required.suburb.wide(id='locationSuburb_0',name='locations[0][suburb]',placeholder='type to see suggestions')
           input(id='locationSuburb_0_id',type='hidden',name='locations[0][id]',value='')
 
-        fieldset.nested.detail.area.ui-widget-content
+        fieldset.nested.area.ui-widget-content
           legend Address
             mixin private
           div.flowing.detail.field
@@ -81,7 +83,7 @@ form#new-job(method='post',action='/jobs/new')
       button#addExtraLocation(type='button') Add an extra location
 
   fieldset.area.ui-widget-content
-    legend Other information about the job?
+    legend Important details about the job?
 
     div.detail.field
       label.above(for='timing') 
@@ -89,11 +91,11 @@ form#new-job(method='post',action='/jobs/new')
         em (required)
         mixin public
       div
-        | The job must be completed 
+        | The job must be done 
         select#timing.required(name='timing')
-          option(value='before') Before
-          option(value='on') On
-
+          option(value='by',selected=(timing=='by')) By
+          option(value='on',selected=(timing=='on')) On
+        | 
         select#completionDate.required(name='completionDate')
           - each date in possibleCompletionDates
             option(value=date.value)= date.text
@@ -104,8 +106,8 @@ form#new-job(method='post',action='/jobs/new')
         em (optional)
         mixin public
       | Up to $
-      input#expenses.money(name='expenses')
-      |  will be re-imbursed to the worker
+      input#expenses.money.number(name='expenses')
+      |.00 will be re-imbursed to the worker.
 
     div.detail.field
       label.above(for='privateNotes') 
@@ -117,21 +119,32 @@ form#new-job(method='post',action='/jobs/new')
         cols=50,rows=3,
         placeholder='any information the worker needs to know, but that you don&apos;t wish to be public')
 
+  fieldset.area.ui-widget-content
+    legend How much will you pay to get the job done?
+
+    div.mostimportant.field
+      label.above(for='maxPayment') 
+        | Maximum Payment 
+        em (required)
+        mixin secure
+      | $
+      input#maxPayment.money.number.required(type='number',name='maxPayment')
+      |.00      
 
   div.form-actions
     input(type='submit',name='submit',value='Submit')
 
 div#locationTemplate.template
   fieldset
-    div.summary.field
+    div.important.field
       label.above(for='locationSuburb_${locationNo}')
         | Suburb/town
         em (optional)
         mixin public
-      input.required.suburb.wide(id='locationSuburb_${locationNo}',name='locations[${locationNo}][suburb]',placeholder='type to see suggestions')
+      input.suburb.wide(id='locationSuburb_${locationNo}',name='locations[${locationNo}][suburb]',placeholder='type to see suggestions')
       input(id='locationSuburb_${locationNo}_id',type='hidden',name='locations[${locationNo}][id]',value='')
 
-    fieldset.nested.detail.area.ui-widget-content
+    fieldset.nested.area.ui-widget-content
       legend Address
         mixin private
       div.flowing.detail.field
@@ -149,7 +162,8 @@ div#locationTemplate.template
 :coffeescript
   $(->
     $.validator.addMethod "suburb", 
-      (value, element) -> $('#' + element.id + '_id').val() != ''
+      (value, element) -> 
+        $('#' + element.id).val() == '' or $('#' + element.id + '_id').val() != ''
       'Please select a suburb'
 
     $('form').validate

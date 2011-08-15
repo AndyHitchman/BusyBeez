@@ -129,7 +129,6 @@ fieldset.detail legend {
     letter-spacing: -0.08ex;
   }
   label {
-    font-size: 14pt;
     color: @label-color;
     em {
       font-size: 10pt;
@@ -157,8 +156,23 @@ fieldset.detail legend {
   margin-right: 1ex;
 }
 
-.summary {
-  input, select, textarea, button {
+
+.mostimportant.field {
+  font-size: 18pt;
+  input, select, textarea {
+    font-size: 28pt;
+    font-weight: bold;
+  }
+  input:-moz-placeholder,
+  textarea:-moz-placeholder {
+    font-size: 12pt;
+    padding: 3pt 0 3pt 0;
+  }
+}
+
+.important.field {
+  font-size: 16pt;
+  input, select, textarea {
     font-size: 16pt;
   }
   input:-moz-placeholder,
@@ -168,8 +182,9 @@ fieldset.detail legend {
   }
 }
 
-.detail {
-  input, select, textarea, button {
+.detail.field {
+  font-size: 12pt;
+  input, select, textarea {
     font-size: 12pt;
   }
   input:-moz-placeholder,
@@ -297,6 +312,8 @@ button {
   .address-line {
   }
   .money {
-    width: 4em;
+    width: 2.5em;
+    padding: 2pt;
+    text-align: right;
   } 
 }

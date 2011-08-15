@@ -16,17 +16,10 @@ module.exports = (app) ->
               j
   
   app.get '/jobs/new', (req, res) ->
-    day = Date.today()
-    possibleDates = [
-      { value: day.getTime(), text: "Today (#{ _date(day).format 'Do' })" }
-      { value: day.addDays(1).getTime(), text: "Tomorrow (#{ _date(day).format 'Do' })" }
-    ]
-    _.each _.range(12), ->
-      possibleDates.push { value: day.addDays(1).getTime(), text: _date(day).format 'dddd Do MMMM' }
-
     res.render 'jobs/new',
       type: 'errand'
-      possibleCompletionDates: possibleDates
+      timing: 'by'
+      possibleCompletionDates: buildPossibleDates()
         
   
   app.post '/jobs/new', Presence.loggedOnUser, (req, res) ->
@@ -46,3 +39,21 @@ module.exports = (app) ->
     #Make stuff happen?
 
     res.send('done')
+
+buildPossibleDates = ->
+  possibleDates = []
+  day = Date.today()
+
+  #If before 9pm then today is OK.
+  if new Date().getHours() < 21
+    possibleDates.push { value: day.getTime(), text: "Today (#{ _date(day).format 'Do' })" }
+
+  #Tomorrow
+  possibleDates.push { value: day.addDays(1).getTime(), text: "Tomorrow (#{ _date(day).format 'Do' })" }
+
+  #The next two weeks
+  _.each _.range(12), ->
+    possibleDates.push { value: day.addDays(1).getTime(), text: _date(day).format 'dddd Do MMMM' }
+
+  possibleDates
+
