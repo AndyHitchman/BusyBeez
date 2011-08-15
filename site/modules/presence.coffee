@@ -1,11 +1,11 @@
-db = require('./db.coffee').db
+{Db} = require('./db.coffee')
 ObjectId = require('./db.coffee').ObjectId
 
 exports.Presence =
   loggedOnUser: (req, res, next) ->
     userId = req.session.userId
     if userId?
-      db.collection('users').findOne {_id: new ObjectId(userId)}, (err, doc) -> 
+      Db.collection('users').findOne {_id: new ObjectId(userId)}, (err, doc) -> 
         if err? 
           next new Error 'Failed to load user ' + req.session.userId
         else
