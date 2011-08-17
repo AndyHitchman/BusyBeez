@@ -1,12 +1,11 @@
 mixin private
   img(src='/images/private.png',alt='private',title='private, only shown to assigned worker')
 mixin secure
-  img(src='/images/private.png',alt='private',title='private, not shown to anyone')
+  img(src='/images/private.png',alt='private',title='secure, not shown to anyone')
 mixin public
   img(src='/images/public.png',alt='public',title='public, shown to everyone')
 
 - pageTitle.set('List a New Job')
-h1= pageTitle.get()
 form#new-job(method='post',action='/jobs/new')
 
   fieldset#description.area.ui-widget-content

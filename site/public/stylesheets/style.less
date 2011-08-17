@@ -84,6 +84,10 @@ h1.title {
   display: none;
 }
 
+.newline {
+  clear: both;
+}
+
 fieldset {
   margin-top: 1ex;
 }
@@ -180,6 +184,9 @@ fieldset.detail legend {
     font-size: 12pt;
     padding: 3pt 0 3pt 0;
   }
+  .read-only {
+    height: 2.9ex;
+  }
 }
 
 .detail.field {
@@ -192,13 +199,15 @@ fieldset.detail legend {
     font-size: 10pt;
     padding: 1.9pt 0;
   }
+  .read-only {
+    height: 2.6ex;
+  }
 }
 
 .read-only {
   background-color: #ddd;
   .input-borders;
-  height: 2.9ex;
-  padding: 0.25ex 0 0.3ex 0;
+  padding: 0.1ex 0 0.45ex 0.1em;
 }
 
 .ui-autocomplete-loading { 

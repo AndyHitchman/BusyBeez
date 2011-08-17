@@ -10,5 +10,12 @@ html
     script(type='text/javascript', src='/javascripts/jquery.form.js')
     script(type='text/javascript', src='/javascripts/suggest.js')
     script(type='text/javascript', src='/javascripts/toggleDependent.js')
+
+    :coffeescript
+      $.validator.setDefaults
+        errorPlacement: (error, element) -> error.appendTo element.parent()
+    
   body
+    h1= pageTitle.get()
+    div#flash!= flashMessages
     != body

@@ -1,11 +1,11 @@
-{Db} = require('./db.coffee')
-ObjectId = require('./db.coffee').ObjectId
+{db, ObjectId} = require './db.coffee'
+crypto = require 'crypto'
 
-exports.Presence =
+exports.presence =
   loggedOnUser: (req, res, next) ->
     userId = req.session.userId
     if userId?
-      Db.collection('users').findOne {_id: new ObjectId(userId)}, (err, doc) -> 
+      db.collection('users').findOne {_id: new ObjectId(userId)}, (err, doc) -> 
         if err? 
           next new Error 'Failed to load user ' + req.session.userId
         else
@@ -13,3 +13,11 @@ exports.Presence =
           next()
     else
       next()
+
+  setLoggedOnUserId: (req, id) ->
+    req.session.userId = id
+
+  hashPassword: (plain) ->
+    hash = crypto.createHash 'sha1'
+    hash.update plain + 'Charles Babbage'
+    hash.digest 'base64'

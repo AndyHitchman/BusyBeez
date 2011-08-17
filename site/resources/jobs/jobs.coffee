@@ -2,12 +2,12 @@ require 'date-utils'
 _date = require 'underscore.date'
 _ = require 'underscore'
 {EventEmitter} = require 'events'
-{Db} = require('../../modules/db.coffee')
-{Presence} = require('../../modules/presence.coffee')
+{db} = require('../../modules/db.coffee')
+{presence} = require('../../modules/presence.coffee')
 
 module.exports = (app) ->
   app.get '/jobs', (req, res) ->
-    Db.collection('jobs').findItems {}, (err, items) ->
+    db.collection('jobs').findItems {}, (err, items) ->
       res.render 'jobs',
         jobs: 
           _(items)
@@ -15,30 +15,37 @@ module.exports = (app) ->
               j.avatar = 'fred'
               j
   
+
   app.get '/jobs/new', (req, res) ->
     res.render 'jobs/new',
       type: 'errand'
       timing: 'by'
       possibleCompletionDates: buildPossibleDates()
         
-  
-  app.post '/jobs/new', Presence.loggedOnUser, (req, res) ->
+
+  app.post '/jobs/new', (req, res) ->
     input = req.body   
     console.log input
 
     #Validate the input. We're relying on client side JS to help the user. This is a simple guard.
-    if !input.type or !input.title or !input.description or 
+    if !input.type or !input.title or !input.description or !input.maxPayment or
        (input.type != 'online' and
          (input.locations.length == 0 or 
           !_(input.locations).some (l) -> l.id))
       throw new Error('invalid input')
 
-    #Store it
-    #db.collection('jobs')
+    #Save the unconfirmed job into session state and redirect to confirm, possibly via logon or create profile.
+    req.session.newJob = input
+    res.redirect '/jobs/confirmnew'
 
-    #Make stuff happen?
 
-    res.send('done')
+  app.get '/jobs/confirmnew', presence.loggedOnUser, (req, res) ->
+    if !req.user?
+      #Redirect to create profile
+      req.flash 'info', "We've got that job on hold while you log on or create a profile"
+      return res.redirect '/profiles/new?returnto=/jobs/confirmnew'
+
+    res.send 'done'
 
 buildPossibleDates = ->
   possibleDates = []

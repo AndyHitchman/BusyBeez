@@ -1,0 +1,93 @@
+mixin private
+  img(src='/images/private.png',alt='private',title='private, only shown to assigned worker')
+mixin secure
+  img(src='/images/private.png',alt='private',title='secure, not shown to anyone')
+mixin public
+  img(src='/images/public.png',alt='public',title='public, shown to everyone')
+
+- pageTitle.set('Create a Profile')
+form#new-profile(method='post',action='/profiles/new?returnto=#{returnto}')
+
+  fieldset.area.ui-widget-content
+    legend Sign in with your facebook account
+
+  fieldset.area.ui-widget-content
+    legend Or enter your details below
+    p
+      | We want you to use your real name as it helps encourage a trusting community. 
+      | Your first name and the initial of your last name will be visible on the site.
+    div
+      div.important.flowing.field
+        label.above(for='firstName')
+          | First name
+          em (required)
+          mixin public
+        input#firstName.narrow.required(name='firstName',value=model.firstName)
+
+      div.important.flowing.field
+        label.above(for='lastName')
+          | Last name
+          em (required)
+          mixin secure
+        input#lastName.narrow.required(name='lastName',value=model.lastName)
+
+    div.newline.important.field
+      label.above(for='suburb')
+        | Suburb/town
+        em (required)
+        mixin public
+      input#suburb.wide.required.suburb(name='suburb',value=model.suburb,placeholder='type to see suggestions')
+      input#suburbId(type='hidden',name='suburbId',value=model.suburbId)
+
+    div.newline.important.field
+      label.above(for='email')
+        | Email address
+        em (required)
+        mixin secure
+      input#email.wide.required.email(name='email',value=model.email)
+
+    div
+      div.detail.flowing.field
+        label.above(for='password')
+          | Password
+          em (required)
+          mixin secure
+        input#password.narrow.required(type='password',name='password',value=model.password)
+
+      div.detail.flowing.field
+        label.above(for='confirmPassword')
+          | Confirm password
+          em (required)
+          mixin secure
+        input#confirmPassword.narrow.required(type='password',name='confirmPassword',value=model.confirmPassword)
+
+  div.form-actions
+    input(type='submit',name='submit',value='Submit')
+
+
+:coffeescript
+  $(->
+    $.validator.addMethod 'suburb', 
+      (value, element) -> 
+        $('#' + element.id).val() == '' or $('#' + element.id + 'Id').val() != ''
+      'Please select a suburb'
+
+    $('form').validate
+      rules: 
+        password:
+          minlength: 5
+        confirmPassword:
+          equalTo: '#password'
+          minlength: 5
+
+    $('#suburb').suggest
+      source: '/reference/locality'
+      select: (event, ui) ->
+        if(ui.item)
+          $('#suburb').val ui.item.label
+          $('#suburbId').val ui.item.id
+          $('#suburb').valid()
+      search: -> $('#suburbId').val('')
+      supplement: (s) ->  ' (' + s.state + ')'
+  )
+

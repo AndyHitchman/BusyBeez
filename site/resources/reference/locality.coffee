@@ -1,5 +1,5 @@
 _ = require 'underscore'
-{Db} = require('../../modules/db.coffee')
+{db} = require('../../modules/db.coffee')
 
 module.exports = (app) ->
   app.get '/reference/locality', (req, res) ->
@@ -7,7 +7,7 @@ module.exports = (app) ->
     match = '^' + req.param('term').split('(')[0]
     match += '$' if req.param('exact')
 
-    Db.collection('localities')
+    db.collection('localities')
       .find({locality: { $regex : match, $options: 'i'}})
       .limit(100)
       .toArray (err, items) ->

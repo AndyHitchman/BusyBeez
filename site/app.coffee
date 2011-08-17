@@ -5,7 +5,7 @@
 
 require 'less'
 express = require 'express'
-property = require './modules/property.coffee'
+{dynamicHelpers} = require './modules/helpers.coffee'
 app = module.exports = express.createServer();
 
 # Configuration
@@ -27,14 +27,12 @@ app.configure 'development', () ->
 app.configure 'production', () -> 
   app.use express.errorHandler() 
 
-app.dynamicHelpers {
-    pageTitle: property.create()
-  }
-
+app.dynamicHelpers dynamicHelpers
 
 # Resources
 
 require('./resources/home/home.coffee')(app)
+require('./resources/profiles/profiles.coffee')(app)
 require('./resources/jobs/jobs.coffee')(app)
 require('./resources/reference/locality.coffee')(app)
 require('./resources/reference/fakelogin.coffee')(app)
