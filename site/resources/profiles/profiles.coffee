@@ -1,9 +1,5 @@
-require 'date-utils'
-_date = require 'underscore.date'
-_ = require 'underscore'
-{EventEmitter} = require 'events'
 {db} = require '../../modules/db.coffee'
-{presence} = require '../../modules/presence.coffee'
+{presence} = require '../../modules/user.coffee'
 
 module.exports = (app) ->
   app.get '/profiles/new', presence.loggedOnUser, (req, res) ->
@@ -26,27 +22,26 @@ module.exports = (app) ->
         returnto: returnto
         model: input
       
-    #Ensure email is unique
-    db.collection('users').find({email: input.email}).count (err, count) ->
-      if count > 0
+    user =
+      firstName:  input.firstName
+      lastName:   input.lastName
+      suburb:     input.suburb
+      suburbId:   input.suburbId
+      email:      input.email
+      password:   input.password
+
+    bus.emit 'newUser', user, (err, dbUser) ->
+      if err?.notUnique
         req.flash 'error', 
           'We already have a profile with this email address. Is it yours? Try signing on or request a password reset'
         return res.render 'profiles/new',
           returnto: returnto
           model: input
-      else
-        user =
-          firstName:  input.firstName
-          lastName:   input.lastName
-          suburb:     input.suburb
-          suburbId:   input.suburbId
-          email:      input.email
-          password:   presence.hashPassword input.password
 
-        db.collection('users').insert user
-        presence.setLoggedOnUserId req, user._id
-        req.flash 'info',
-          "Thanks! We've logged you on and you're good to go! Please look for the confirmation email in your inbox."
+      presence.setLoggedOnUserId req, user._id
 
-        return res.redirect returnto
+      req.flash 'info',
+        'Thanks ' + dbUser.firstName + 
+        "! We've logged you on and you're good to go! Please look for the confirmation email in your inbox."
+      return res.redirect returnto
 

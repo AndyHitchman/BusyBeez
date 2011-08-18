@@ -1,9 +1,8 @@
 require 'date-utils'
 _date = require 'underscore.date'
 _ = require 'underscore'
-{EventEmitter} = require 'events'
-{db} = require('../../modules/db.coffee')
-{presence} = require('../../modules/presence.coffee')
+{db} = require '../../modules/db.coffee'
+{presence} = require '../../modules/user.coffee'
 
 module.exports = (app) ->
   app.get '/jobs', (req, res) ->

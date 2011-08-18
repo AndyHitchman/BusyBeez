@@ -7,6 +7,7 @@ require 'less'
 express = require 'express'
 {dynamicHelpers} = require './modules/helpers.coffee'
 app = module.exports = express.createServer();
+{EventEmitter} = require 'events'
 
 # Configuration
 
@@ -23,11 +24,18 @@ app.configure () ->
 
 app.configure 'development', () ->
   app.use express.errorHandler { dumpExceptions: true, showStack: true } 
+  global.domainName = 'localhost:3000'
 
 app.configure 'production', () -> 
   app.use express.errorHandler() 
 
 app.dynamicHelpers dynamicHelpers
+
+
+# Event consumers
+
+global.bus = new EventEmitter
+require('./modules/user.coffee')
 
 # Resources
 
