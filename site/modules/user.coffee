@@ -23,26 +23,26 @@ exports.presence = presence =
     hash.digest 'base64'
 
 
-bus.on 'newUser', (user, callback) ->
-  #Ensure email is unique
-  db.collection('users').find({email: user.email}).count (err, count) ->
-    if err?
-      throw err
+exports.user = 
+  create: (user, callback) ->
+    #Ensure email is unique
+    db.collection('users').find({email: user.email}).count (err, count) ->
+      if err?
+        throw err
 
-    if count > 0
-      return callback {notUnique: true}
+      if count > 0
+        return callback {notUnique: true}
 
-    user.lastNameInitial = user.lastName.substr 0, 1
-    user.password = presence.hashPassword user.password
-    user.confirmed = false
-    user.confirmationToken = new ObjectId()
+      user.lastNameInitial = user.lastName.substr 0, 1
+      user.password = presence.hashPassword user.password
+      user.confirmed = false
+      user.confirmationToken = new ObjectId()
 
-    db.collection('users').insert user
+      db.collection('users').insert user
 
-    console.log 'STUB' +
-      ' introductory email sent to ' + user.email + 
-      ' with confirmation link https://' + global.domainName + '/profile/confirm/' + user.confirmationToken
+      console.log 'STUB' +
+        ' introductory email sent to ' + user.email + 
+        ' with confirmation link https://' + global.domainName + '/profile/confirm/' + user.confirmationToken
 
-    callback null, user
+      callback null
 
-bus.on 'newJob', (job, user) ->

@@ -1,5 +1,5 @@
 {db} = require '../../modules/db.coffee'
-{presence} = require '../../modules/user.coffee'
+{presence, user} = require '../../modules/user.coffee'
 
 module.exports = (app) ->
   app.get '/profiles/new', presence.loggedOnUser, (req, res) ->
@@ -22,7 +22,7 @@ module.exports = (app) ->
         returnto: returnto
         model: input
       
-    user =
+    newUser =
       firstName:  input.firstName
       lastName:   input.lastName
       suburb:     input.suburb
@@ -30,7 +30,7 @@ module.exports = (app) ->
       email:      input.email
       password:   input.password
 
-    bus.emit 'newUser', user, (err, dbUser) ->
+    user.create newUser, (err) ->
       if err?.notUnique
         req.flash 'error', 
           'We already have a profile with this email address. Is it yours? Try signing on or request a password reset'
@@ -38,10 +38,11 @@ module.exports = (app) ->
           returnto: returnto
           model: input
 
-      presence.setLoggedOnUserId req, user._id
+      presence.setLoggedOnUserId req, newUser._id
 
       req.flash 'info',
-        'Thanks ' + dbUser.firstName + 
+        'Thanks ' + newUser.firstName + 
         "! We've logged you on and you're good to go! Please look for the confirmation email in your inbox."
+
       return res.redirect returnto
 
