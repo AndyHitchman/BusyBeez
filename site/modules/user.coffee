@@ -40,9 +40,12 @@ exports.user =
 
       db.collection('users').insert user
 
-      console.log 'STUB' +
-        ' introductory email sent to ' + user.email + 
-        ' with confirmation link https://' + global.domainName + '/profile/confirm/' + user.confirmationToken
+      bus.emit 'newUser', user
 
       callback null
+
+bus.on 'newUser', (user) ->
+  console.log 'STUB' +
+    ' introductory email sent to ' + user.email + 
+    ' with confirmation link https://' + global.domainName + '/profile/confirm/' + user.confirmationToken
 
