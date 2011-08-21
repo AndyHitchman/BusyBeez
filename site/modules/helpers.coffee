@@ -1,14 +1,14 @@
-property = require './property.coffee'
+property = require "./property.coffee"
 
-exports.dynamicHelpers = 
-  siteName: -> 'BuzyBees'
+exports.dynamicHelpers =
+  siteName: -> "BuzyBees"
 
   pageTitle: property.create()
 
   flashMessages: (req, res) ->
-    html = '';
+    html = "";
 
-    ['error', 'info'].forEach (type) ->
+    ["error", "info"].forEach (type) ->
       messages = req.flash type
       if messages.length > 0
         html += new FlashMessage(type, messages).toHTML();
@@ -18,23 +18,23 @@ exports.dynamicHelpers =
 
 class FlashMessage
   constructor: (@type, messages) ->
-    @messages = if typeof messages == 'string' then [messages] else messages
+    @messages = if typeof messages == "string" then [messages] else messages
 
   icon: ->
     switch @type
-      when 'info' then 'ui-icon-info'
-      when 'error' then 'ui-icon-alert'
+      when "info" then "ui-icon-info"
+      when "error" then "ui-icon-alert"
 
   stateClass: ->
     switch @type
-      when 'info' then 'ui-state-highlight'
-      when 'error' then 'ui-state-error'
+      when "info" then "ui-state-highlight"
+      when "error" then "ui-state-error"
 
   toHTML: ->
-    '<div class="ui-widget flash">' +
-    '<div class="' + this.stateClass() + ' ui-corner-all">' +
-    '<p><span class="ui-icon ' + this.icon() + '"></span>' + this.messages.join(', ') + '</p>' +
-    '</div>' +
-    '</div>'
+    "<div class='ui-widget flash'>" +
+    "<div class='#{this.stateClass()} ui-corner-all'>" +
+    "<p><span class='ui-icon #{this.icon()}'></span>#{this.messages.join(", ")}</p>" +
+    "</div>" +
+    "</div>"
 
 
