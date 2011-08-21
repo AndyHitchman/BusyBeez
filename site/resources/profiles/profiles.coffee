@@ -1,8 +1,9 @@
 {db} = require '../../modules/db.coffee'
-{presence, user} = require '../../modules/user.coffee'
+{user} = require '../../modules/user.coffee'
 
 module.exports = (app) ->
-  app.get '/profiles/new', presence.loggedOnUser, (req, res) ->
+
+  app.get '/profiles/new', user.signedIn, (req, res) ->
     returnto = req.param('returnto') ? 'home'
     if req.user? then return res.redirect returnto
 
@@ -12,16 +13,16 @@ module.exports = (app) ->
 
 
   app.post '/profiles/new', (req, res) ->
-    input = req.body   
+    input = req.body
     returnto = req.param('returnto') ? 'home'
 
     #Validate the input. We're relying on client side JS to help the user. This is a simple guard.
-    if !input.firstName or !input.lastName or !input.suburbId or !input.email or 
+    if !input.firstName or !input.lastName or !input.suburbId or !input.email or
        !input.password or !input.confirmPassword
       return res.render 'profiles/new',
         returnto: returnto
         model: input
-      
+
     newUser =
       firstName:  input.firstName
       lastName:   input.lastName
@@ -32,17 +33,17 @@ module.exports = (app) ->
 
     user.create newUser, (err) ->
       if err?.notUnique
-        req.flash 'error', 
-          'We already have a profile with this email address. Is it yours? Try signing on or request a password reset'
+        req.flash 'error',
+          'We already have a profile with this email address. Is it yours? Try signing in or request a password reset.'
         return res.render 'profiles/new',
           returnto: returnto
           model: input
 
-      presence.setLoggedOnUserId req, newUser._id
+      user.setSignedInUserId req, newUser._id
 
       req.flash 'info',
-        'Thanks ' + newUser.firstName + 
+        'Thanks ' + newUser.firstName +
         "! We've logged you on and you're good to go! Please look for the confirmation email in your inbox."
 
-      return res.redirect returnto
+      res.redirect returnto
 
