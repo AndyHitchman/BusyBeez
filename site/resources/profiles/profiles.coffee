@@ -39,11 +39,16 @@ module.exports = (app) ->
           returnto: returnto
           model: input
 
-      user.setSignedInUserId req, newUser._id
+      user.setSignedInUser req, newUser
 
       req.flash "info",
-        "Thanks " + newUser.firstName +
-        "! We've logged you on and you're good to go! Please look for the confirmation email in your inbox."
-
+        "Thanks #{newUser.firstName}! " +
+        "We've logged you on and you're good to go! Please look for the confirmation email in your inbox."
       res.redirect returnto
 
+
+  app.get "/profiles/confirm/:token", (req, res) ->
+    return res.send "Not a recognised confirmation token" unless req.params.token?
+    confirmedUser = user.confirmUserIdentity req.params.token
+    user.setSignedInUser req, confirmedUser if confirmedUser?
+    return res.redirect "home"

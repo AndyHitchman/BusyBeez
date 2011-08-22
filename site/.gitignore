@@ -5,3 +5,7 @@ npm-debug.log
 *.swp
 **/*.swp
 public/stylesheets/style.css
+#*#
+.#*
+**/#*#
+**/.#*

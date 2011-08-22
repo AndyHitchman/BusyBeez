@@ -1,12 +1,12 @@
 {db, ObjectId} = require "../modules/db.coffee"
 crypto = require "crypto"
 
-exports.user =
+exports.user = self =
 
   mustBeSignedIn : (signInFlash) ->
     (req, res, next) ->
       signedIn req, res, (err) ->
-        if err? then next err
+        next err if err?
         if !req.user?
           #Redirect to create profile
           req.flash "info", signInFlash ? "You must create a profile or be signed in to continue"
@@ -18,14 +18,6 @@ exports.user =
   signedIn: (req, res, next) ->
     req.user = req.session.user
     next()
-
-
-  getById: (id) ->
-    db.collection("users").findOne {_id: new ObjectId(id)}, (err, doc) ->
-      if err?
-        throw new Error "Failed to load user " + id
-      else
-        req.user = doc
 
 
   setSignedInUser: (req, user) ->
@@ -42,17 +34,31 @@ exports.user =
     hash.digest "base64"
 
 
+  getById: (id) ->
+    db.collection("users").findOne {_id: new ObjectId(id)}, (err, doc) ->
+      throw new Error "Failed to load user " + id if err?
+      doc
+
+
+  confirmUserIdentity: (token) ->
+    db.collection("users").findOne {confirmationToken: new ObjectId(token)}, (err, doc) ->
+      throw new Error "Failed to query users" if err?
+      console.log doc
+      return null unless doc?
+      doc.confirmationToken = null
+      doc.confirmed = true
+      db.collection("users").save(doc)
+      doc
+
+
   create: (user, callback) ->
     #Ensure email is unique
     db.collection("users").find({email: user.email}).count (err, count) ->
-      if err?
-        throw err
-
-      if count > 0
-        return callback {notUnique: true}
+      throw err if err?
+      return callback {notUnique: true} if count > 0
 
       user.lastNameInitial = user.lastName.substr 0, 1
-      user.password = hashPassword user.password
+      user.password = self.hashPassword user.password
       user.confirmed = false
       user.confirmationToken = new ObjectId()
 
@@ -65,5 +71,5 @@ exports.user =
 bus.on "newUser", (user) ->
   console.log "STUB" +
     " introductory email sent to " + user.email +
-    " with confirmation link https://#{global.domainName}/profile/confirm/#{user.confirmationToken}"
+    " with confirmation link https://#{global.domainName}/profiles/confirm/#{user.confirmationToken}"
 
