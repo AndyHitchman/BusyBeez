@@ -27,7 +27,7 @@ module.exports = (app) ->
     input = req.body
     console.log input
 
-    #Validate the input. We"re relying on client side JS to help the user. This is a simple guard.
+    #Validate the input. We're relying on client side JS to help the user. This is a simple guard.
     if !input.type or !input.title or !input.description or !input.maxPayment or
        (input.type != 'online' and
          (input.locations.length == 0 or
