@@ -2,9 +2,10 @@ require 'date-utils'
 _date = require 'underscore.date'
 _ = require 'underscore'
 {db} = require '../../modules/db.coffee'
-{user} = require '../../domain/user.coffee'
+user = require('../profiles/profiles.coffee').middleware
 
-module.exports = (app) ->
+
+exports.routes = (app) ->
 
   app.get '/jobs', (req, res) ->
     db.collection('jobs').findItems {}, (err, items) ->
@@ -45,10 +46,19 @@ module.exports = (app) ->
       newJob = req.session.newJob
       return res.redirect '/jobs/new' if !newJob?
 
-      job.create newJob, (err) ->
+      create newJob, (err) ->
 
 
         res.send 'done'
+
+
+
+bus.on 'newJob', (job) ->
+  console.log "STUB new job"
+
+
+create = (job, callback) ->
+  bus.emit 'newJob', newJob
 
 
 buildPossibleDates = ->

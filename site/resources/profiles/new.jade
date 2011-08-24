@@ -8,11 +8,16 @@ mixin public
 - pageTitle.set('Create a Profile')
 form#new-profile(method='post',action='/profiles/new?returnto=#{returnto}')
 
-  fieldset.area.ui-widget-content
-    legend Sign in with your facebook account
+  div.halves
+    div
+      fieldset.area.ui-widget-content
+        legend Sign in with your facebook account
+    div
+      fieldset.area.ui-widget-content
+        legend Sign in with your email and password
 
-  fieldset.area.ui-widget-content
-    legend Or enter your details below
+  fieldset.newline.area.ui-widget-content
+    legend Or create a profile by entering your details below
     p
       | We want you to use your real name as it helps encourage a trusting community. 
       | Your first name and the initial of your last name will be visible on the site.

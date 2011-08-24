@@ -41,8 +41,8 @@ require('./domain/user.coffee')
 # Resources
 
 require('./resources/home/home.coffee')(app)
-require('./resources/profiles/profiles.coffee')(app)
-require('./resources/jobs/jobs.coffee')(app)
+require('./resources/profiles/profiles.coffee').routes(app)
+require('./resources/jobs/jobs.coffee').routes(app)
 require('./resources/reference/locality.coffee')(app)
 require('./resources/reference/fakelogin.coffee')(app)
 

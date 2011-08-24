@@ -1,0 +1,2 @@
+db.users.ensureIndex({confirmationToken: 1})
+db.users.ensureIndex({email: 1})

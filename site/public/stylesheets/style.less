@@ -55,20 +55,45 @@ h1.title {
   height: 25ex;
 }
 
-.panel {
-  float: left;
-}
-
 .area {
   border: 1px solid #cdcdcd;
   border-radius: 4px 4px;
   padding: 1ex 1em 2ex 1em;
 }
 
-.third-pane {
-  .panel;
-  width: 33%;
+.panel {
+  float: left;
   height: 100%;
+}
+
+.halves {
+  > div {
+    .panel;
+    width: 50%;
+    padding-left: 0;
+    padding-right: 1ex;
+  }
+  > div + div {
+    padding-left: 1ex;
+    padding-right: 0;
+  }
+}
+
+.thirds {
+  > div {
+    .panel;
+    width: 33%;
+    padding-left: 0;
+    padding-right: 1ex;
+  }
+  > div + div {
+    padding-left: 1ex;
+    padding-right: 1ex;
+  }
+  > div + div + div {
+    padding-left: 1ex;
+    padding-right: 0;
+  }
 }
 
 .feature {
