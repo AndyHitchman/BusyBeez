@@ -5,7 +5,7 @@ mixin secure
 mixin public
   img(src='/images/public.png',alt='public',title='public, shown to everyone')
 
-- pageTitle.set('Create a Profile')
+- pageTitle.set('Sign in or Create a Profile')
 
   div.halves
     div.w30
@@ -25,8 +25,8 @@ mixin public
               | Password
               em (required)
             input#password.password.small.required(name='password',type='password')
-          div.form-actions
-            input(type='submit',name='submit',value='Sign in')
+            span.inline-action
+              input(type='submit',name='submit',value='Sign in')
 
 
 form#new-profile.major-block.newline(method='post',action='/profiles/new?returnto=#{returnto}')

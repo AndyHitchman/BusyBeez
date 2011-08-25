@@ -231,6 +231,9 @@ fieldset.detail legend {
   input, select, textarea {
     font-size: 16pt;
   }
+  .inline-action input {
+    font-size: 13pt;
+  }
   input:-moz-placeholder,
   textarea:-moz-placeholder {
     font-size: 12pt;
@@ -245,6 +248,9 @@ fieldset.detail legend {
   font-size: 12pt;
   input, select, textarea {
     font-size: 12pt;
+  }
+  .inline-action input {
+    font-size: 10pt;
   }
   input:-moz-placeholder,
   textarea:-moz-placeholder {
@@ -278,17 +284,24 @@ fieldset.detail legend {
   font-size: 9pt;
 }
 
+.button {
+  vertical-align: top;
+  padding: 0 0.5em;
+  border-width: 3px;
+  border-style: outset;
+  border-radius: 6px;
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 2pt 2pt 1.5pt #333;
+}
+
 .form-actions {
   margin-top: 2ex;
   float: right;
   input[type='submit'] {
+    .button;
     padding: 1ex 1em 1ex 1em;
-    border: 3px outset #0f0;
-    border-radius: 6px;
-    color: #fff;
     font-size: 14pt;
-    font-weight: bold;
-    text-shadow: 2pt 2pt 1.5pt #333;
     background-color: #0d0;
   }
   input[type='submit']:hover {
@@ -296,9 +309,25 @@ fieldset.detail legend {
   }
 }
 
-button {
-  margin: 1ex 0;
+.inline-action {
+  input[type='submit'] {
+    .button;
+    border-color: #0f0;
+    background-color: #0d0;
+  }
+  input[type='submit']:hover {
+    background-color: #3f3;
+  }
+  button {
+    .button;
+    border-color: #c81;
+    background-color: #c61;
+  }
+  button:hover {
+    background-color: #e71;
+  }
 }
+
 
 /* 
 ** List Job 

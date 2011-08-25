@@ -112,7 +112,7 @@ __ =
     "/profiles/new?returnto=#{querystring.escape(req.url)}"
 
   returnToUrl: (req) ->
-    querystring.unescape(req.param('returnto')) ? 'home'
+    querystring.unescape(req.param('returnto') ? '') ? 'home'
 
   setSignedInUser: (req, user) ->
     req.session.user =

@@ -79,7 +79,8 @@ form#new-job(method='post',action='/jobs/new')
             div.read-only.narrow(id='locationLocality_0')
 
       div#extraLocations
-      button#addExtraLocation(type='button') Add an extra location
+      div.inline-action
+        button#addExtraLocation(type='button') Add an extra location
 
   fieldset.area.ui-widget-content
     legend Important details about the job?
@@ -134,7 +135,7 @@ form#new-job(method='post',action='/jobs/new')
     input(type='submit',name='submit',value='Submit')
 
 div#locationTemplate.template
-  fieldset
+  fieldset.location
     div.important.field
       label.above(for='locationSuburb_${locationNo}')
         | Suburb/town
@@ -142,6 +143,8 @@ div#locationTemplate.template
         mixin public
       input.suburb.wide(id='locationSuburb_${locationNo}',name='locations[${locationNo}][suburb]',placeholder='type to see suggestions')
       input(id='locationSuburb_${locationNo}_id',type='hidden',name='locations[${locationNo}][id]',value='')
+      span.inline-action
+        button.removeLocation(type='button') Remove location
 
     fieldset.nested.area.ui-widget-content
       legend Address
@@ -206,8 +209,11 @@ div#locationTemplate.template
       $('#locationTemplate').tmpl(
         locationNo: thisLocationNo
       ).appendTo $('#extraLocations')
-      
+#Todo: copy remove bind with template, or rebind!      
       bindSuggest thisLocationNo
+
+    $('.removeLocation').click ->
+      $(this).parents('.location').remove();
 
     bindSuggest = (thisLocationNo) ->       
       $('#locationSuburb_' + thisLocationNo).suggest
