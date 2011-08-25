@@ -13,10 +13,31 @@ exports.routes = (app) ->
       model: {}
 
 
+  app.post '/profiles/signin', (req, res) ->
+    input = req.body
+    if !input.email or !input.password
+      req.flash 'error',
+        "There's something wrong with the information you entered. Please enter your email address and password."
+      return res.render 'profiles/new',
+        returnto: __.returnToUrl req
+        model: input
+
+    db.collection('users').findOne {email: input.email, password: __.hashPassword input.password }, (err, doc) ->
+      if !doc?
+        req.flash 'error',
+          "We don't know who you are. Please check you typed the right email address and password and try again."
+        return res.render 'profiles/new',
+          returnto: __.returnToUrl req
+          model: input
+
+      __.setSignedInUser req, doc
+      res.redirect __.returnToUrl req
+
+
   app.post '/profiles/new', (req, res) ->
     input = req.body
 
-    #Validate the input. We"re relying on client side JS to help the user. This is a simple guard.
+    #Validate the input. We're relying on client side JS to help the user. This is a simple guard.
     if !input.firstName or !input.lastName or !input.suburbId or !input.email or
        !input.password or !input.confirmPassword
       req.flash 'error', "There's something wrong with the information you entered. Please check and try again"

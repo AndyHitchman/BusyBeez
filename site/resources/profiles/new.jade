@@ -6,17 +6,31 @@ mixin public
   img(src='/images/public.png',alt='public',title='public, shown to everyone')
 
 - pageTitle.set('Create a Profile')
-form#new-profile(method='post',action='/profiles/new?returnto=#{returnto}')
 
   div.halves
-    div
+    div.w30
       fieldset.area.ui-widget-content
-        legend Sign in with your facebook account
-    div
-      fieldset.area.ui-widget-content
-        legend Sign in with your email and password
+        legend Sign in with facebook
+    div.w70
+      form#sign-in(method='post',action='/profiles/signin?returnto=#{returnto}')
+        fieldset.area.ui-widget-content
+          legend Sign in with your email and password
+          div.important.flowing.field
+            label.above(for='email')
+              | Email
+              em (required)
+            input#email.email.narrow.required(name='email',value=model.email)
+          div.important.flowing.field
+            label.above(for='password')
+              | Password
+              em (required)
+            input#password.password.small.required(name='password',type='password')
+          div.form-actions
+            input(type='submit',name='submit',value='Sign in')
 
-  fieldset.newline.area.ui-widget-content
+
+form#new-profile.major-block.newline(method='post',action='/profiles/new?returnto=#{returnto}')
+  fieldset.area.ui-widget-content
     legend Or create a profile by entering your details below
     p
       | We want you to use your real name as it helps encourage a trusting community. 
@@ -66,8 +80,8 @@ form#new-profile(method='post',action='/profiles/new?returnto=#{returnto}')
           mixin secure
         input#confirmPassword.narrow.required(type='password',name='confirmPassword',value=model.confirmPassword)
 
-  div.form-actions
-    input(type='submit',name='submit',value='Submit')
+    div.form-actions
+      input(type='submit',name='submit',value='Submit')
 
 
 :coffeescript

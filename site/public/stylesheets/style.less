@@ -62,13 +62,19 @@ h1.title {
 }
 
 .panel {
+  overflow: hidden:
+  width: 100%;
+}
+
+.pane {
   float: left;
   height: 100%;
 }
 
 .halves {
+  .panel;
   > div {
-    .panel;
+    .pane;
     width: 50%;
     padding-left: 0;
     padding-right: 1ex;
@@ -77,11 +83,18 @@ h1.title {
     padding-left: 1ex;
     padding-right: 0;
   }
+  > div.w30 {
+  	width: 30%;
+  }
+  > div.w70 {
+    width: 70%;
+  }
 }
 
 .thirds {
+  .panel;
   > div {
-    .panel;
+    .pane;
     width: 33%;
     padding-left: 0;
     padding-right: 1ex;
@@ -120,6 +133,10 @@ h1.title {
   clear: both;
 }
 
+.major-block {
+  padding-top: 3ex;
+}
+
 fieldset {
   margin-top: 1ex;
 }
@@ -150,6 +167,9 @@ fieldset.detail legend {
   }
   .full {
     width: 100%;
+  }
+  .small {
+    width: 180px;
   }
   .narrow {
     width: 250px;
