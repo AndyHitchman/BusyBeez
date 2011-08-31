@@ -209,7 +209,8 @@ div#locationTemplate.template
       $('#locationTemplate').tmpl(
         locationNo: thisLocationNo
       ).appendTo $('#extraLocations')
-#Todo: copy remove bind with template, or rebind!      
+      
+      #Todo: copy remove bind with template, or rebind!      
       bindSuggest thisLocationNo
 
     $('.removeLocation').click ->
@@ -217,7 +218,8 @@ div#locationTemplate.template
 
     bindSuggest = (thisLocationNo) ->       
       $('#locationSuburb_' + thisLocationNo).suggest
-        source: '/reference/locality'
+        directlyTypedMustExist: true
+        url: '/reference/locality'
         select: (event, ui) ->
           if(ui.item)
             $('#locationSuburb_' + thisLocationNo).val ui.item.label

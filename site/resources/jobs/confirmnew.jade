@@ -1,0 +1,26 @@
+mixin private
+  img(src='/images/private.png',alt='private',title='private, only shown to assigned worker')
+mixin secure
+  img(src='/images/private.png',alt='private',title='secure, not shown to anyone')
+mixin public
+  img(src='/images/public.png',alt='public',title='public, shown to everyone')
+
+- pageTitle.set('Confirm the New Job')
+form#new-job(method='post',action='/jobs/confirm')
+
+  fieldset#description.area.ui-widget-content
+    legend Tag the job
+
+    div.important.field
+      label.above(for='tags')
+        | Tags
+        em (optional)
+        mixin public
+      input.tags.full(id='tags',name='tags',placeholder='type to see suggestions')
+
+:coffeescript
+  $('#tags).suggest
+    source: '/reference/tags'
+    supplement: (match) ->  ' (' + match.count + ')'
+
+

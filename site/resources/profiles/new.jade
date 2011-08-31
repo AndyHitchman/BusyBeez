@@ -100,7 +100,7 @@ form#new-profile.major-block.newline(method='post',action='/profiles/new?returnt
           minlength: 5
 
     $('#suburb').suggest
-      source: '/reference/locality'
+      url: '/reference/locality'
       select: (event, ui) ->
         if(ui.item)
           $('#suburb').val ui.item.label
