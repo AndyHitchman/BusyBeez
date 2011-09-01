@@ -1,7 +1,7 @@
 require 'date-utils'
 _date = require 'underscore.date'
 _ = require 'underscore'
-{db} = require '../../modules/db.coffee'
+{db} = require '../modules/db.coffee'
 user = require('../profiles/profiles.coffee').middleware
 
 
@@ -21,7 +21,7 @@ exports.routes = (app) ->
     res.render 'jobs/new',
       type: 'errand'
       timing: 'by'
-      possibleCompletionDates: buildPossibleDates()
+      possibleCompletionDates: __.buildPossibleDates()
 
 
   app.post '/jobs/new', (req, res) ->
@@ -46,10 +46,8 @@ exports.routes = (app) ->
       newJob = req.session.newJob
       return res.redirect '/jobs/new' if !newJob?
 
-      create newJob, (err) ->
-
-
-        res.send 'done'
+      __.create newJob, (err) ->
+        res.render 'jobs/confirmnew'
 
 
 
@@ -57,24 +55,26 @@ bus.on 'newJob', (job) ->
   console.log "STUB new job"
 
 
-create = (job, callback) ->
-  bus.emit 'newJob', newJob
+__ =
+  create: (job, callback) ->
+    bus.emit 'newJob', job
+    callback()
 
 
-buildPossibleDates = ->
-  possibleDates = []
-  day = Date.today()
+  buildPossibleDates: ->
+    possibleDates = []
+    day = Date.today()
 
-  #If before 9pm then today is OK.
-  if new Date().getHours() < 21
-    possibleDates.push { value: day.getTime(), text: "Today (#{ _date(day).format 'Do' })" }
+    #If before 9pm then today is OK.
+    if new Date().getHours() < 21
+      possibleDates.push { value: day.getTime(), text: "Today (#{ _date(day).format 'Do' })" }
 
-  #Tomorrow
-  possibleDates.push { value: day.addDays(1).getTime(), text: "Tomorrow (#{ _date(day).format 'Do' })" }
+    #Tomorrow
+    possibleDates.push { value: day.addDays(1).getTime(), text: "Tomorrow (#{ _date(day).format 'Do' })" }
 
-  #The next two weeks
-  _.each _.range(12), ->
-    possibleDates.push { value: day.addDays(1).getTime(), text: _date(day).format 'dddd Do MMMM' }
+    #The next two weeks
+    _.each _.range(12), ->
+      possibleDates.push { value: day.addDays(1).getTime(), text: _date(day).format 'dddd Do MMMM' }
 
-  possibleDates
+    possibleDates
 

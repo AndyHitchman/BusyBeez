@@ -1,8 +1,7 @@
 (function( $ ){
-    function getMatches(req, add, url, $info) {
+		function getMatches(req, res, url, $info) {
 				$info.text('');
 				$.getJSON(url, req, function(data) {  
-						var suggestions = [];
 						if(data.meta.matches == 0) {
 								$info.text('No matches');
 						} 
@@ -12,10 +11,11 @@
 						else if(data.meta.more) {
 								$info.text(data.meta.excess + ' more match' + (data.meta.excess > 1 ? 'es' : ''));
 						}
+						var suggestions = [];
 						$.each(data.items, function(i, val) {  
 								suggestions.push({ label: val.label, id: val.id, supplement: val.supplement });  
 						});  
-						add(suggestions);
+						res(suggestions);
 				});
 		}
 
@@ -26,15 +26,15 @@
 				function extractLast(term) {
 						return split(term).pop();
 				}
-				
+
 				return this.each(function() {
 						var $this = $(this); 
 						var $info = $('<span class="suggest-info"><span>').insertAfter($this);   
 
 						var settings = {
 								minLength: 2,
-								source: function(req, add) {
-										getMatches({ term: extractLast(req.term) }, add, options.url, $info);
+								source: function(req, res) {
+										return getMatches({ term: extractLast(req.term) }, res, options.url, $info);
 								}
 						};
 
@@ -48,13 +48,16 @@
 										return false;
 								}
 								if(options.search) {
-										options.search();
+										return options.search();
 								}
-						}
+								return true;
+						};
+
 						settings.focus = function() {
 								// prevent value inserted on focus
 								return false;
-						}
+						};
+
 						settings.select = function(event, ui) {
 								var terms = split(this.value);
 								// remove the current input
@@ -69,9 +72,9 @@
 										options.select(event, ui);
 								}
 								return false;
-						}
+						};
 
-						$this.suggest(settings)
+						$this
 								.bind("keydown", function(event) {
 										// don't navigate away from the field on tab when selecting an item
 										if(event.keyCode === $.ui.keyCode.TAB &&
@@ -79,8 +82,9 @@
 												event.preventDefault();
 										}
 								})
+								.suggest(settings);
 				});
-		}
+		};
 
 		$.fn.suggest = function(options) {
 				return this.each(function() {
@@ -90,8 +94,8 @@
 						var settings = {
 								minLength: 2,
 								directlyTypedMustExist: false,
-								source: function(req, add) {
-										getMatches(req, add, options.url, $info);
+								source: function(req, res) {
+										return getMatches(req, res, options.url, $info);
 								}
 						};
 
@@ -107,7 +111,7 @@
 										return $('<li></li>')
 												.data('item.autocomplete', item)
 												.append('<a>' + item.label + settings.supplement(item.supplement) + '</a>')
-      									.appendTo(ul);
+												.appendTo(ul);
 								};
 						}
 

@@ -12,7 +12,7 @@ app = module.exports = express.createServer();
 # Configuration
 
 app.configure () ->
-  app.set 'views', __dirname + '/resources'
+  app.set 'views', __dirname
   app.set "view engine", 'jade'
   app.use express.bodyParser()
   app.use express.cookieParser()
@@ -36,15 +36,15 @@ app.dynamicHelpers dynamicHelpers
 # Entities
 
 global.bus = new EventEmitter
-require('./domain/user.coffee')
 
 # Resources
 
-require('./resources/home/home.coffee')(app)
-require('./resources/profiles/profiles.coffee').routes(app)
-require('./resources/jobs/jobs.coffee').routes(app)
-require('./resources/reference/locality.coffee')(app)
-require('./resources/reference/fakelogin.coffee')(app)
+require('./home/home.coffee').routes(app)
+require('./profiles/profiles.coffee').routes(app)
+require('./jobs/jobs.coffee').routes(app)
+require('./reference/locality.coffee').routes(app)
+require('./reference/tags.coffee').routes(app)
+require('./reference/fakelogin.coffee').routes(app)
 
 app.listen 3000
 console.log "Express server listening on port #{app.address().port}, in #{app.settings.env} mode"

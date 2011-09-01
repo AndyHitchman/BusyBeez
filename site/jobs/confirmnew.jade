@@ -19,8 +19,9 @@ form#new-job(method='post',action='/jobs/confirm')
       input.tags.full(id='tags',name='tags',placeholder='type to see suggestions')
 
 :coffeescript
-  $('#tags).suggest
-    source: '/reference/tags'
-    supplement: (match) ->  ' (' + match.count + ')'
-
-
+  $(->
+    $('#tags').multisuggest
+      minLength: 1
+      url: '/reference/tags'
+      supplement: (match) ->  ' (' + match.count + ')'
+  )

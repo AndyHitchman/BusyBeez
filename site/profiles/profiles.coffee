@@ -1,4 +1,4 @@
-{db, ObjectId} = require '../../modules/db.coffee'
+{db, ObjectId} = require '../modules/db.coffee'
 crypto = require 'crypto'
 querystring = require 'querystring'
 
@@ -152,7 +152,7 @@ __ =
       return callback {notUnique: true} if count > 0
 
       user.lastNameInitial = user.lastName.substr 0, 1
-      user.password = self.hashPassword user.password
+      user.password = __.hashPassword user.password
       user.confirmed = false
       user.confirmationToken = new ObjectId()
 
