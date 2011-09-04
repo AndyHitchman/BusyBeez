@@ -16,12 +16,13 @@ form#new-job(method='post',action='/jobs/confirm')
         | Tags
         em (optional)
         mixin public
-      input.tags.full(id='tags',name='tags',placeholder='type to see suggestions')
+      ul#tags(name='tags')
 
 :coffeescript
   $(->
-    $('#tags').multisuggest
-      minLength: 1
+    $('#tags').tags
       url: '/reference/tags'
+      select: true
+      autoFocus: true
       supplement: (match) ->  ' (' + match.count + ')'
   )

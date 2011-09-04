@@ -104,7 +104,7 @@
 						}
 
 						$this.autocomplete(settings);
-						$this.blur(function() { $info.text('') });
+						$this.blur(function() { $info.text(''); });
 
 						if(settings.supplement) {
 								$this.data('autocomplete')._renderItem = function(ul, item) {
@@ -125,6 +125,58 @@
 																var ui = { item: data.items[0] };
 																//Treat it as selected.
 																$this.data('autocomplete')
+																		.options.select(null, ui);
+														}
+												});
+										}
+								});
+						}
+				});
+		};
+
+
+		$.fn.tags = function(options) {
+				return this.each(function() {
+						var $this = $(this);
+
+						var settings = {
+								minLength: 1,
+								directlyTypedMustExist: false,
+								tagSource: function(req, res) {
+										//$info is hoisted which aloows this closure access to the value set below.
+										return getMatches(req, res, options.url, $info);
+								}
+						};
+
+						if(options) { 
+								$.extend(settings, options);
+						}
+
+						$this.tagit(settings);
+
+						var $input = $('.tagit-input', $this);
+						var $info = $('<span class="suggest-info"><span>').insertAfter($input);
+						$input.blur(function() { $info.text(''); });
+
+						if(settings.supplement) {
+								$input.data('autocomplete')._renderItem = function(ul, item) {
+										return $('<li></li>')
+												.data('item.autocomplete', item)
+												.append('<a>' + item.label + settings.supplement(item.supplement) + '</a>')
+												.appendTo(ul);
+								};
+						}
+
+						if(settings.directlyTypedMustExist) {
+								$input.blur(function() {
+										var item = $input.data('autocomplete').selectedItem;
+										if(!item) {
+												//Nothing selected, but possibly a valid value. See if one result returned.
+												$.getJSON(settings.url, { exact: true, term: $input.val() }, function(data) {  
+														if(data.meta.matches == 1) {
+																var ui = { item: data.items[0] };
+																//Treat it as selected.
+																$input.data('autocomplete')
 																		.options.select(null, ui);
 														}
 												});

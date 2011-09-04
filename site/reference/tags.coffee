@@ -8,10 +8,10 @@ exports.routes = (app) ->
       collection : 'tags'
       property   : 'tag'
       term       : req.param('term')
-      limit      : 100
-      max        : 25
+      exact      : req.param('exact')
+      sort       : { count: -1 }
       supplement : (i) ->
-        count      : i.count
+        count : i.count
 
     suggest options, (items) ->
       res.send items

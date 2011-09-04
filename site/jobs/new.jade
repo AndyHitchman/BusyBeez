@@ -210,11 +210,7 @@ div#locationTemplate.template
         locationNo: thisLocationNo
       ).appendTo $('#extraLocations')
       
-      #Todo: copy remove bind with template, or rebind!      
       bindSuggest thisLocationNo
-
-    $('.removeLocation').click ->
-      $(this).parents('.location').remove();
 
     bindSuggest = (thisLocationNo) ->       
       $('#locationSuburb_' + thisLocationNo).suggest
@@ -230,7 +226,9 @@ div#locationTemplate.template
               ui.item.supplement.postcode)            
             $('#locationSuburb_' + thisLocationNo).valid()
         search: -> $('#locationSuburb_' + thisLocationNo + '_id').val('')
-        supplement: (s) ->  ' (' + s.state + ')'
+        supplement: (s) ->  ' (' + s.postcode + ')'
+      $('.removeLocation').click ->
+        $(this).parents('.location').remove();
 
     bindSuggest 0
   )
