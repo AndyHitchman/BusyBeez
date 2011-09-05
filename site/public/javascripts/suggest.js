@@ -19,83 +19,18 @@
 				});
 		}
 
-		$.fn.multisuggest = function(options) {
-				function split(val) {
-						return val.split(/,\s*/);
-				}
-				function extractLast(term) {
-						return split(term).pop();
-				}
-
-				return this.each(function() {
-						var $this = $(this); 
-						var $info = $('<span class="suggest-info"><span>').insertAfter($this);   
-
-						var settings = {
-								minLength: 2,
-								source: function(req, res) {
-										return getMatches({ term: extractLast(req.term) }, res, options.url, $info);
-								}
-						};
-
-						if(options) { 
-								$.extend(settings, options);
-						}
-
-						settings.search = function() {
-								var term = extractLast(this.value);
-								if(term.length < options.minLength) {
-										return false;
-								}
-								if(options.search) {
-										return options.search();
-								}
-								return true;
-						};
-
-						settings.focus = function() {
-								// prevent value inserted on focus
-								return false;
-						};
-
-						settings.select = function(event, ui) {
-								var terms = split(this.value);
-								// remove the current input
-								terms.pop();
-								// add the selected item
-								terms.push(ui.item.value);
-								// add placeholder to get the comma-and-space at the end
-								terms.push("");
-								this.value = terms.join(", ");
-
-								if(options.select) {
-										options.select(event, ui);
-								}
-								return false;
-						};
-
-						$this
-								.bind("keydown", function(event) {
-										// don't navigate away from the field on tab when selecting an item
-										if(event.keyCode === $.ui.keyCode.TAB &&
-												 $(this).data("autocomplete").menu.active) {
-												event.preventDefault();
-										}
-								})
-								.suggest(settings);
-				});
-		};
-
 		$.fn.suggest = function(options) {
 				return this.each(function() {
 						var $this = $(this);    
-						var $info = $('<span class="suggest-info"><span>').insertAfter($this);   
-
+						
 						var settings = {
 								minLength: 2,
 								directlyTypedMustExist: false,
 								source: function(req, res) {
 										return getMatches(req, res, options.url, $info);
+								},
+								close: function() {
+									$info.empty();	
 								}
 						};
 
@@ -104,17 +39,25 @@
 						}
 
 						$this.autocomplete(settings);
-						$this.blur(function() { $info.text(''); });
+
+						var $info = $('<li class="suggest-info"></li>');
+						var $ac = $this.data('autocomplete');
+				    $ac._renderMenu = function(ul, items) {
+								$.each(items, function(index, item) {
+										$ac._renderItem(ul, item);
+								});
+								$info.appendTo(ul);
+						};
 
 						if(settings.supplement) {
-								$this.data('autocomplete')._renderItem = function(ul, item) {
+								$ac._renderItem = function(ul, item) {
 										return $('<li></li>')
 												.data('item.autocomplete', item)
 												.append('<a>' + item.label + settings.supplement(item.supplement) + '</a>')
 												.appendTo(ul);
 								};
 						}
-
+						
 						if(settings.directlyTypedMustExist) {
 								$this.blur(function() {
 										var item = $this.data('autocomplete').selectedItem;
@@ -145,6 +88,9 @@
 								tagSource: function(req, res) {
 										//$info is hoisted which aloows this closure access to the value set below.
 										return getMatches(req, res, options.url, $info);
+								},
+								close: function() {
+									$info.empty();	
 								}
 						};
 
@@ -153,13 +99,19 @@
 						}
 
 						$this.tagit(settings);
-
 						var $input = $('.tagit-input', $this);
-						var $info = $('<span class="suggest-info"><span>').insertAfter($input);
-						$input.blur(function() { $info.text(''); });
+
+						var $info = $('<li class="suggest-info"></li>');
+						var $ac = $input.data('autocomplete');
+				    $ac._renderMenu = function(ul, items) {
+								$.each(items, function(index, item) {
+										$ac._renderItem(ul, item);
+								});
+								$info.appendTo(ul);
+						};
 
 						if(settings.supplement) {
-								$input.data('autocomplete')._renderItem = function(ul, item) {
+								$ac._renderItem = function(ul, item) {
 										return $('<li></li>')
 												.data('item.autocomplete', item)
 												.append('<a>' + item.label + settings.supplement(item.supplement) + '</a>')

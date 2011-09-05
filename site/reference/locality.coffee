@@ -8,6 +8,7 @@ exports.routes = (app) ->
       property   : 'locality'
       term       : req.param('term')
       exact      : req.param('exact')
+      max        : 10
       supplement : (i) ->
         suburb     : i.locality
         postcode   : i.postcode
