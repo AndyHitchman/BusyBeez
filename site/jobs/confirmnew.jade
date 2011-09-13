@@ -7,11 +7,35 @@ mixin public
 
 - pageTitle.set('Confirm the New Job')
 form#new-job(method='post',action='/jobs/confirm')
-
-  fieldset#description.area.ui-widget-content
-    legend Tag the job
+  
+  fieldset.area.ui-widget-content
+    legend Confirm your job details
     p
-      | Add tags to your job to make sure the right people get to see it.
+      - var listLocations = true;
+      - if (model.type == 'online')
+        - listLocations = false;
+        | The job is online and does not involve travel
+      - else if (model.type == 'errand')
+        | The job is an errand 
+      - else if (model.type == 'help')
+        | You need a helping hand 
+      - else if (model.type == 'pickup')
+        | The job is to pick up something portable 
+      - else if (model.type == 'move')
+        | The job is to move things  
+      - if (listLocations)
+        span in or around #{model.locations[0].suburb}
+        - each location in model.locations.slice(1, model.locations.length - 1)
+          | , #{location.suburb}
+        - if (model.locations.length > 1)
+          | and #{model.locations[model.locations.length - 1].suburb}
+      |  and you will pay at most $#{model.maxPayment} for someone to #{model.title} #{model.timing} 
+      | #{friendlyTicksText(model.completionDate)}.
+            
+  fieldset.area.ui-widget-content
+    legend Tag your job
+    p.
+      Add tags to your job to make sure the right people get to see it.
 
     div.detail.field
       label.above(for='tags')

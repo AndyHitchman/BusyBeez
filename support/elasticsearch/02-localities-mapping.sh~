@@ -1,0 +1,13 @@
+#!/bin/sh
+BUSYBEEZ='http://localhost:9200/busybeez/'
+curl -XPUT ${BUSYBEEZ}/localities/_mapping -d '
+{
+  "localities" : {
+    "properties" : {
+      "postcode" : { "type" : "string", "analyser" : "keyword" },
+      "locality" : { "type" : "string", "analyser" : "keyword" },
+      "state" : { "type" : "string", "analyser" : "keyword" },
+      "zone" : { "type" : "string", "analyser" : "keyword" }
+    }
+  }
+}'

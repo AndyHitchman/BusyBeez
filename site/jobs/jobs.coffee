@@ -19,8 +19,9 @@ exports.routes = (app) ->
 
   app.get '/jobs/new', (req, res) ->
     res.render 'jobs/new',
-      type: 'errand'
-      timing: 'by'
+      model:
+        type: 'errand'
+        timing: 'by'
       possibleCompletionDates: __.buildPossibleDates()
 
 
@@ -36,19 +37,26 @@ exports.routes = (app) ->
       throw new Error("invalid input")
 
     #Save the unconfirmed job into session state and redirect to confirm, possibly via logon or create profile.
-    req.session.newJob = input
+    req.session.job = input
     res.redirect '/jobs/confirmnew'
 
 
   app.get '/jobs/confirmnew',
+    __.sessionHasJob,
     user.mustBeSignedIn("We've got that job on hold while you log on or create a profile"),
     (req, res) ->
-      newJob = req.session.newJob
-      return res.redirect '/jobs/new' if !newJob?
+      #Suggest tags by searching
+      res.render 'jobs/confirmnew'
+        model: req.job
+        friendlyTicksText: __.friendlyTicksText
 
-      __.create newJob, (err) ->
-        res.render 'jobs/confirmnew'
 
+  app.post '/jobs/confirmnew',
+    __.sessionHasJob,
+    user.mustBeSignedIn("We've got that job on hold while you log on or create a profile"),
+    (req, res) ->
+
+      res.redirect 'home'
 
 
 bus.on 'newJob', (job) ->
@@ -56,6 +64,12 @@ bus.on 'newJob', (job) ->
 
 
 __ =
+  sessionHasJob: (req, res, next) ->
+    req.job = req.session.job
+    return res.redirect '/jobs/new' if !req.job?
+    next()
+
+
   create: (job, callback) ->
     bus.emit 'newJob', job
     callback()
@@ -67,14 +81,19 @@ __ =
 
     #If before 9pm then today is OK.
     if new Date().getHours() < 21
-      possibleDates.push { value: day.getTime(), text: "Today (#{ _date(day).format 'Do' })" }
-
-    #Tomorrow
-    possibleDates.push { value: day.addDays(1).getTime(), text: "Tomorrow (#{ _date(day).format 'Do' })" }
+      possibleDates.push { value: day.getTime(), text: __.friendlyDateText day }
 
     #The next two weeks
-    _.each _.range(12), ->
-      possibleDates.push { value: day.addDays(1).getTime(), text: _date(day).format 'dddd Do MMMM' }
+    _.each _.range(13), ->
+      possibleDates.push { value: day.addDays(1).getTime(), text: __.friendlyDateText day }
 
     possibleDates
 
+  friendlyTicksText: (dateTicks) ->
+    dateTicks = Number(dateTicks)
+    day = new Date(Number(dateTicks))
+    return "Today (#{ _date(day).format 'Do' })" if dateTicks == Date.today().getTime()
+    return "Tomorrow (#{ _date(day).format 'Do' })" if dateTicks == Date.tomorrow().getTime()
+    return _date(day).format 'dddd Do MMMM'
+
+  friendlyDateText: (day) -> __.friendlyTicksText day.getTime()

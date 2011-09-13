@@ -1,0 +1,3 @@
+#!/bin/sh
+busybeez='http://localhost:9200/busybeez/'
+curl -XPUT $buzybeez

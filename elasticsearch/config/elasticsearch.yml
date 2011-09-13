@@ -28,3 +28,11 @@
 # Unicast Discovery (disable multicast)
 #discovery.zen.ping.multicast.enabled: false
 #discovery.zen.ping.unicast.hosts: ["host1", "host2"]
+
+index:
+		analysis:
+				analyzer:
+						literal:
+							  type: custom
+								tokenizer: keyword
+								filter: lowercase

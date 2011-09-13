@@ -12,37 +12,37 @@ form#new-job(method='post',action='/jobs/new')
     legend What is the job?
 
     div.wide.field#jobType
-      input#jobTypeErrand(type='radio',name='type',value='errand',checked=(type=='errand' || !type))
+      input#jobTypeErrand(type='radio',name='type',value='errand',checked=(model.type=='errand' || !model.type))
       label(for='jobTypeErrand',title='around and about the local area, e.g. shopping run') 
         img(src='/images/errand.png',alt='errand')
         | Errand
-      input#jobTypeHelp(type='radio',name='type',value='help',checked=type=='help')
+      input#jobTypeHelp(type='radio',name='type',value='help',checked=model.type=='help')
       label(for='jobTypeHelp',title='lend me a hand, e.g. a two-person job, fix my car')
         img(src='/images/helping-hand.png',alt='help')
         | Helping hand
-      input#jobTypePickup(type='radio',name='type',value='pickup',checked=type=='pickup')
+      input#jobTypePickup(type='radio',name='type',value='pickup',checked=model.type=='pickup')
       label(for='jobTypePickup',title='need transport, e.g. parcel collection')
         img(src='/images/pickup.png',alt='pickup')
         | Pickup
-      input#jobTypeMove(type='radio',name='type',value='move',checked=type=='move')
+      input#jobTypeMove(type='radio',name='type',value='move',checked=model.type=='move')
       label(for='jobTypeMove',title='need a van, e.g. moving furniture')
         img(src='/images/move.png',alt='move')
         | Move
-      input#jobTypeOnline(type='radio',name='type',value='online',checked=type=='online')
+      input#jobTypeOnline(type='radio',name='type',value='online',checked=model.type=='online')
       label(for='jobTypeOnline',title='wholly online, e.g. research')
         img(src='/images/online.png',alt='online')
         | Online
 
     div.important.field
       label.above(for='title') 
-        | Title
+        | I need someone to
         em (required)
         mixin public
       input#title.full.required(name='title',placeholder='e.g. shop for groceries, stake out a spot in the park')
 
     div.detail.field
       label.above(for='description') 
-        | Description
+        | Details
         em (required)
         mixin public
       textarea#description.full.required(
@@ -93,8 +93,8 @@ form#new-job(method='post',action='/jobs/new')
       div
         | The job must be done 
         select#timing.required(name='timing')
-          option(value='by',selected=(timing=='by')) By
-          option(value='on',selected=(timing=='on')) On
+          option(value='by',selected=(model.timing=='by')) By
+          option(value='on',selected=(model.timing=='on')) On
         | 
         select#completionDate.required(name='completionDate')
           - each date in possibleCompletionDates
